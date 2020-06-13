@@ -44,7 +44,7 @@ Public Class F1_Facturas
         _prAsignarPermisos()
 
         btnNuevo.Visible = False
-        btnEliminar.Visible = False
+        ''btnEliminar.Visible = False
     End Sub
 
     Private Sub _prCargarComboLibreria(mCombo As Janus.Windows.GridEX.EditControls.MultiColumnCombo, cod1 As String, cod2 As String)

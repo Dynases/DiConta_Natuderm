@@ -6,6 +6,7 @@ Public Class F0_ComprobanteCompra
     Public filaSelect As Janus.Windows.GridEX.GridEXRow
     Public seleccionado As Boolean = False
     Public _detalleCompras As DataTable
+    Public _NumeroFactura As Integer
 
 #Region "Metodos privados"
     'Private Sub _PMCargarBuscador()
@@ -176,41 +177,55 @@ Public Class F0_ComprobanteCompra
 
 
     End Sub
+    Private Sub MostrarMensajeError(mensaje As String)
+        ToastNotification.Show(Me,
+                               mensaje.ToUpper,
+                               My.Resources.WARNING,
+                               5000,
+                               eToastGlowColor.Red,
+                               eToastPosition.TopCenter)
+
+    End Sub
 
     Public Function _PMOGrabarRegistro() As Boolean
-        Dim ffec As String
-        Dim fnit As String
-        Dim frsocial As String
-        Dim fnro As String
-        Dim fautoriz As String
-        Dim fmonto As String
-        Dim fccont As String
-        Dim sujetoCreditoFiscal As String
-        Dim subTotal As String
-        Dim fdesc As String
-        Dim importeBaseCreditoFiscal As String
-        Dim creditoFiscal As String
+        Try
+            Dim ffec As String
+            Dim fnit As String
+            Dim frsocial As String
+            Dim fnro As String
+            Dim fautoriz As String
+            Dim fmonto As String
+            Dim fccont As String
+            Dim sujetoCreditoFiscal As String
+            Dim subTotal As String
+            Dim fdesc As String
+            Dim importeBaseCreditoFiscal As String
+            Dim creditoFiscal As String
 
-        ffec = DtiFechaFactura.Value.ToString("yyyy/MM/dd")
-        fnit = TbNit.Text
-        frsocial = TbRazonSocial.Text
-        fnro = tbinrofactura.Text
-        fautoriz = TbNroAutorizacion.Text
-        fmonto = TbdMontoFactura.Value.ToString
-        sujetoCreditoFiscal = tbSujetoCreditoFiscal.Value.ToString
-        subTotal = TbSubTotal.Value.ToString
-        fdesc = TbdDescuento.Value.ToString
-        importeBaseCreditoFiscal = tbImporteBaseCreditoFiscal.Value.ToString
-        creditoFiscal = tbCreditoFiscal.Value.ToString
-        fccont = TbCodigoControl.Text
+            ffec = DtiFechaFactura.Value.ToString("yyyy/MM/dd")
+            fnit = TbNit.Text
+            frsocial = TbRazonSocial.Text
+            fnro = tbinrofactura.Text
+            fautoriz = TbNroAutorizacion.Text
+            fmonto = TbdMontoFactura.Value.ToString
+            sujetoCreditoFiscal = tbSujetoCreditoFiscal.Value.ToString
+            subTotal = TbSubTotal.Value.ToString
+            fdesc = TbdDescuento.Value.ToString
+            importeBaseCreditoFiscal = tbImporteBaseCreditoFiscal.Value.ToString
+            creditoFiscal = tbCreditoFiscal.Value.ToString
+            fccont = TbCodigoControl.Text
 
-        Dim numi As String = ""
+            Dim numi As String = ""
 
-        _detalleCompras.Rows.Add(1, ffec, fnit, frsocial, fnro, tbDui.Value, fautoriz, fmonto, sujetoCreditoFiscal, subTotal, fdesc, importeBaseCreditoFiscal, creditoFiscal, fccont, tbTipo.Value, 0, 0)
+            _detalleCompras.Rows.Add(1, ffec, fnit, frsocial, fnro, tbDui.Value, fautoriz, fmonto, sujetoCreditoFiscal, subTotal, fdesc, importeBaseCreditoFiscal, creditoFiscal, fccont, tbTipo.Value, 0, 0)
 
-        seleccionado = True
+            seleccionado = True
 
-        Close()
+            Close()
+
+        Catch ex As Exception
+            MostrarMensajeError(ex.Message)
+        End Try
 
         'Dim res As Boolean = L_prCompraComprobanteGrabar(numi, ffec, fnit, frsocial, fnro, fautoriz, fmonto, fccont, fmcfiscal, fdesc)
         'If res Then

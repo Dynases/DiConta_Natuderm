@@ -805,10 +805,10 @@ Partial Class F1_AsientosContables
         '
         Me.SuperTabControlPanel3.Controls.Add(Me.grAsientoBanco)
         Me.SuperTabControlPanel3.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.SuperTabControlPanel3.Location = New System.Drawing.Point(0, 24)
+        Me.SuperTabControlPanel3.Location = New System.Drawing.Point(0, 25)
         Me.SuperTabControlPanel3.Margin = New System.Windows.Forms.Padding(2)
         Me.SuperTabControlPanel3.Name = "SuperTabControlPanel3"
-        Me.SuperTabControlPanel3.Size = New System.Drawing.Size(1000, 197)
+        Me.SuperTabControlPanel3.Size = New System.Drawing.Size(995, 197)
         Me.SuperTabControlPanel3.TabIndex = 0
         Me.SuperTabControlPanel3.TabItem = Me.SuperTabItem3
         '
@@ -825,7 +825,7 @@ Partial Class F1_AsientosContables
         Me.grAsientoBanco.Office2007ColorScheme = Janus.Windows.GridEX.Office2007ColorScheme.Custom
         Me.grAsientoBanco.Office2007CustomColor = System.Drawing.Color.DodgerBlue
         Me.grAsientoBanco.RowFormatStyle.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.2!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.grAsientoBanco.Size = New System.Drawing.Size(1000, 197)
+        Me.grAsientoBanco.Size = New System.Drawing.Size(995, 197)
         Me.grAsientoBanco.TabIndex = 1
         Me.grAsientoBanco.VisualStyle = Janus.Windows.GridEX.VisualStyle.Office2007
         '

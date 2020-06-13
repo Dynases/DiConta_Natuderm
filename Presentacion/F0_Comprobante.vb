@@ -25,6 +25,7 @@ Public Class F0_Comprobante
 
     Private _numiAuxMod As Integer = 0
     Private _numiAuxSuc As Integer = 0
+    Private _EsNuevo As Boolean = False
 #End Region
 
 #Region "VARIABLES LOCALES"
@@ -628,7 +629,7 @@ ControlChars.Lf & "Stack Trace:" & ControlChars.Lf & e.StackTrace
             .CellStyle.ImageVerticalAlignment = Janus.Windows.GridEX.ImageVerticalAlignment.Center
             .Caption = "COMPRA"
             .Width = 70
-            .Visible = False
+            .Visible = True
         End With
 
         With grDetalle
@@ -1752,7 +1753,22 @@ ControlChars.Lf & "Stack Trace:" & ControlChars.Lf & e.StackTrace
     End Function
 
     Private Sub ELIMINAR_Click(sender As Object, e As EventArgs)
-        _prEliminarFilaDetalle()
+        Try
+            If _EsNuevo Then
+                _prEliminarFilaDetalle()
+            Else
+                'Verifica si se quiere eliminar una factura
+                If grDetalle.GetValue("obcuenta").ToString <> "24" Then
+                    _prEliminarFilaDetalle()
+                Else
+                    Throw New Exception("Eliminar la factura desde el programa de Factura")
+                End If
+            End If
+        Catch ex As Exception
+            MostrarMensajeError(ex.Message)
+        End Try
+
+
     End Sub
 
     Private Sub subItem_Click(sender As Object, e As EventArgs)
@@ -1981,46 +1997,68 @@ ControlChars.Lf & "Stack Trace:" & ControlChars.Lf & e.StackTrace
         tbTipo.BackColor = Color.White
         tbTipoCambio.BackgroundStyle.BackColor = Color.White
     End Sub
+    Private Sub MostrarMensajeError(mensaje As String)
+        ToastNotification.Show(Me,
+                               mensaje.ToUpper,
+                               My.Resources.WARNING,
+                               5000,
+                               eToastGlowColor.Red,
+                               eToastPosition.TopCenter)
 
+    End Sub
     Public Function _PMOGrabarRegistro() As Boolean
-        Dim dtDetalle As DataTable = CType(grDetalle.DataSource, DataTable)
-        _prPonerLine(dtDetalle)
-        dtDetalle = dtDetalle.DefaultView.ToTable(True, "obnumi", "obnumito1", "oblin", "obcuenta", "obaux1", "obaux2", "obaux3", "obobs", "obobs2", "obcheque", "obtc", "obdebebs", "obhaberbs", "obdebeus", "obhaberus", "estado")
+        Try
+            Dim dtDetalle As DataTable = CType(grDetalle.DataSource, DataTable)
+            _prPonerLine(dtDetalle)
+            dtDetalle = dtDetalle.DefaultView.ToTable(True, "obnumi", "obnumito1", "oblin", "obcuenta", "obaux1", "obaux2", "obaux3", "obobs", "obobs2", "obcheque", "obtc", "obdebebs", "obhaberbs", "obdebeus", "obhaberus", "estado")
 
 
-        If tbMes.Text.Trim.Count = 1 Then
-            tbMes.Text = "0" + tbMes.Text
-        End If
-        Dim fecha As DateTime = New Date(tbFecha.Value.Year, tbFecha.Value.Month, tbFecha.Value.Day, Now.Hour, Now.Minute, Now.Second)
+            If tbMes.Text.Trim.Count = 1 Then
+                tbMes.Text = "0" + tbMes.Text
+            End If
+            Dim fecha As DateTime = New Date(tbFecha.Value.Year, tbFecha.Value.Month, tbFecha.Value.Day, Now.Hour, Now.Minute, Now.Second)
 
-        Dim res As Boolean = L_prComprobanteGrabar(tbNumi.Text, tbNroDoc.Text, tbTipo.Value, tbAnio.Text, tbMes.Text, tbNum.Text, fecha.ToString("yyyy-MM-dd"), tbTipoCambio.Value, tbGlosa.Text, tbObs.Text, gi_empresaNumi, dtDetalle, _detalleDetalle, _detalleDetalleCompras, gs_user)
-        If res Then
+            Dim res As Boolean = L_prComprobanteGrabar(tbNumi.Text, tbNroDoc.Text, tbTipo.Value, tbAnio.Text, tbMes.Text, tbNum.Text, fecha.ToString("yyyy-MM-dd"),
+                                                        tbTipoCambio.Value, tbGlosa.Text, tbObs.Text, gi_empresaNumi, dtDetalle,
+                                                        _detalleDetalle, _detalleDetalleCompras, gs_user)
+            If res Then
 
-            ToastNotification.Show(Me, "Codigo ".ToUpper + tbNumi.Text + " Grabado con Exito.".ToUpper, My.Resources.GRABACION_EXITOSA, 5000, eToastGlowColor.Green, eToastPosition.TopCenter)
-            _prImprimir()
+                ToastNotification.Show(Me, "Codigo ".ToUpper + tbNumi.Text + " Grabado con Exito.".ToUpper, My.Resources.GRABACION_EXITOSA, 5000, eToastGlowColor.Green, eToastPosition.TopCenter)
+                _prImprimir()
 
-            L_prComprobanteEliminarRespaldo(gi_userNumi)
-        End If
-        Return res
-
+                L_prComprobanteEliminarRespaldo(gi_userNumi)
+            End If
+            Return res
+        Catch ex As Exception
+            MostrarMensajeError(ex.Message)
+            Return False
+        End Try
     End Function
 
     Public Function _PMOModificarRegistro() As Boolean
-        tbEmpresa.Focus()
+        Try
+            tbEmpresa.Focus()
 
-        Dim dtDetalle As DataTable = CType(grDetalle.DataSource, DataTable)
-        _prPonerLine(dtDetalle)
-        dtDetalle = dtDetalle.DefaultView.ToTable(True, "obnumi", "obnumito1", "oblin", "obcuenta", "obaux1", "obaux2", "obaux3", "obobs", "obobs2", "obcheque", "obtc", "obdebebs", "obhaberbs", "obdebeus", "obhaberus", "estado")
+            Dim dtDetalle As DataTable = CType(grDetalle.DataSource, DataTable)
+            _prPonerLine(dtDetalle)
+            dtDetalle = dtDetalle.DefaultView.ToTable(True, "obnumi", "obnumito1", "oblin", "obcuenta", "obaux1", "obaux2", "obaux3", "obobs", "obobs2", "obcheque", "obtc", "obdebebs", "obhaberbs", "obdebeus", "obhaberus", "estado")
 
-        Dim fecha As DateTime = New Date(tbFecha.Value.Year, tbFecha.Value.Month, tbFecha.Value.Day, Now.Hour, Now.Minute, Now.Second)
+            Dim fecha As DateTime = New Date(tbFecha.Value.Year, tbFecha.Value.Month, tbFecha.Value.Day, Now.Hour, Now.Minute, Now.Second)
 
-        Dim res As Boolean = L_prComprobanteModificar(tbNumi.Text, tbNroDoc.Text, tbTipo.Value, tbAnio.Text, tbMes.Text, tbNum.Text, fecha.ToString("yyyy/MM/dd hh:mm:ss"), tbTipoCambio.Value, tbGlosa.Text, tbObs.Text, gi_empresaNumi, dtDetalle, _detalleDetalle)
-        If res Then
+            Dim res As Boolean = L_prComprobanteModificar(tbNumi.Text, tbNroDoc.Text, tbTipo.Value, tbAnio.Text, tbMes.Text,
+                                                          tbNum.Text, fecha.ToString("yyyy/MM/dd hh:mm:ss"), tbTipoCambio.Value,
+                                                          tbGlosa.Text, tbObs.Text, gi_empresaNumi, dtDetalle, _detalleDetalle, _detalleDetalleCompras)
+            If res Then
 
-            ToastNotification.Show(Me, "Codigo ".ToUpper + tbNumi.Text + " modificado con Exito.".ToUpper, My.Resources.GRABACION_EXITOSA, 5000, eToastGlowColor.Green, eToastPosition.TopCenter)
-            '_PSalirRegistro()
-        End If
-        Return res
+                ToastNotification.Show(Me, "Codigo ".ToUpper + tbNumi.Text + " modificado con Exito.".ToUpper, My.Resources.GRABACION_EXITOSA, 5000, eToastGlowColor.Green, eToastPosition.TopCenter)
+                '_PSalirRegistro()
+            End If
+            Return res
+        Catch ex As Exception
+            MostrarMensajeError(ex.Message)
+            Return False
+        End Try
+
     End Function
 
     Public Sub _PMOEliminarRegistro()
@@ -2210,6 +2248,7 @@ ControlChars.Lf & "Stack Trace:" & ControlChars.Lf & e.StackTrace
     End Sub
 
     Private Sub btnNuevo_Click(sender As Object, e As EventArgs) Handles btnNuevo.Click
+        _EsNuevo = True
         tbTipo.Focus()
         Dim dtTipoCambio As DataTable = L_prTipoCambioGeneralPorFecha(Now.ToString("yyyy/MM/dd"))
         If dtTipoCambio.Rows.Count = 0 Then
@@ -2245,6 +2284,7 @@ ControlChars.Lf & "Stack Trace:" & ControlChars.Lf & e.StackTrace
     End Sub
 
     Private Sub btnModificar_Click(sender As Object, e As EventArgs) Handles btnModificar.Click
+        _EsNuevo = False
         tbTipo.Focus()
         _ultimaFecha = tbFecha.Value
         _PMModificar()
@@ -2937,29 +2977,34 @@ ControlChars.Lf & "Stack Trace:" & ControlChars.Lf & e.StackTrace
                             grAyudaCuenta.Tag = -2
                         Else
                             If grAyudaCuenta.GetValue("isCompra") = 1 Then
-                                Dim frm As New F0_ComprobanteCompra
-                                frm._detalleCompras = _detalleDetalleCompras
-                                frm.ShowDialog()
-                                If frm.seleccionado = True Then
-                                    grDetalle.SetValue("numiCompra", _detalleDetalleCompras.Rows.Count)
-                                    grDetalle.SetValue("obobs", "F:" + frm.tbinrofactura.Text)
-                                    'inserto la imagen para que puedan editar el comprobante
-                                    _prInsertarImagen()
-                                End If
+                                If VerificarExistenciaFacturaEnDetalle() Then
+                                    Dim frm As New F0_ComprobanteCompra
+                                    frm._detalleCompras = _detalleDetalleCompras
+                                    'frm._NumeroFactura =
+                                    frm.ShowDialog()
+                                    If frm.seleccionado = True Then
+                                        grDetalle.SetValue("numiCompra", _detalleDetalleCompras.Rows.Count)
+                                        grDetalle.SetValue("obobs", "F:" + frm.tbinrofactura.Text)
+                                        grDetalle.SetValue("obdebebs", frm.tbCreditoFiscal.Text)
+                                        grDetalle.SetValue("obdebeus", Convert.ToDouble(frm.tbCreditoFiscal.Text) / tbTipoCambio.Value)
+                                        'inserto la imagen para que puedan editar el comprobante
+                                        _prInsertarImagen()
+                                    End If
 
 
-                                'verificar si tiene aux1 para mandarlo a buscar el auxiliar 1
-                                If grDetalle.GetValue("numAux") >= 1 Then
-                                    _prCargarGridAyudaAuxiliar(1, _numiAuxMod)
-                                Else
-                                    grDetalle.Focus()
-                                    grDetalle.Col = grDetalle.RootTable.Columns("obobs").Index
+                                    'verificar si tiene aux1 para mandarlo a buscar el auxiliar 1
+                                    If grDetalle.GetValue("numAux") >= 1 Then
+                                        _prCargarGridAyudaAuxiliar(1, _numiAuxMod)
+                                    Else
+                                        grDetalle.Focus()
+                                        grDetalle.Col = grDetalle.RootTable.Columns("obobs").Index
 
-                                    panelAyudaCuenta.Visible = False
+                                        panelAyudaCuenta.Visible = False
+                                    End If
                                 End If
                             Else
-                                'verificar si tiene aux1 para mandarlo a buscar el auxiliar 1
-                                If grDetalle.GetValue("numAux") >= 1 Then
+                                    'verificar si tiene aux1 para mandarlo a buscar el auxiliar 1
+                                    If grDetalle.GetValue("numAux") >= 1 Then
                                     _prCargarGridAyudaAuxiliar(1, _numiAuxMod)
                                 Else
                                     grDetalle.Focus()
@@ -3090,7 +3135,45 @@ ControlChars.Lf & "Stack Trace:" & ControlChars.Lf & e.StackTrace
     Private Sub ButtonX2_Click(sender As Object, e As EventArgs) Handles ButtonX2.Click
         _prImportar()
     End Sub
+    Private Function VerificarExistenciaFacturaEnDetalle() As Boolean
+        Try
+            'Dim cantidadRepetido As Integer = 0
 
+            'Dim tDetalle As DataTable = CType(grDetalle.DataSource, DataTable)
+            'Dim tCopyDetalle As DataTable = tDetalle.Copy
+
+            'Dim codCuentaCreditoFiscal As Integer = 24
+            'tCopyDetalle.DefaultView.RowFilter = "obcuenta =  " + codCuentaCreditoFiscal.ToString() + " And estado >= 0 AND estado is not NULL"
+            'cantidadRepetido = tCopyDetalle.DefaultView.Count()
+            ''tDetalle.DefaultView.ToTable()
+
+            'If cantidadRepetido = 0 Then
+            '    Return True
+            'Else
+            '    If _EsNuevo Then
+            '        Return True
+            '        'Throw New Exception("Existe factura, elimine la fila y registre uno nuevo.")
+            '    Else
+            '        If grDetalle.GetValue("obCuenta") = 24 Then
+            '            Throw New Exception("Existe factura, usar programa de Factura para modficar el mismo.")
+            '        End If
+
+            '    End If
+            'End If
+            If _EsNuevo Then
+                Return True
+                'Throw New Exception("Existe factura, elimine la fila y registre uno nuevo.")
+            Else
+                If grDetalle.GetValue("obCuenta") = 24 And grDetalle.GetValue("estado") >= 1 Then
+                    Throw New Exception("Existe factura, usar programa de Factura para modficar el mismo.")
+                End If
+
+            End If
+        Catch ex As Exception
+            MostrarMensajeError(ex.Message)
+            Return False
+        End Try
+    End Function
     Private Sub tbTipo_ValueChanged(sender As Object, e As EventArgs) Handles tbTipo.ValueChanged
         If btnGrabar.Enabled = True Then
             If tbTipo.SelectedIndex >= 0 Then
@@ -3211,11 +3294,16 @@ ControlChars.Lf & "Stack Trace:" & ControlChars.Lf & e.StackTrace
     End Sub
 
     Private Sub grDetalle_CellEdited(sender As Object, e As ColumnActionEventArgs) Handles grDetalle.CellEdited
-        Dim estado As Integer = grDetalle.GetValue("estado")
-        If estado = 1 Then
-            grDetalle.SetValue("estado", 2)
+        Try
+            Dim estado As Integer = grDetalle.GetValue("estado")
+            If estado = 1 Then
+                grDetalle.SetValue("estado", 2)
 
-        End If
+            End If
+        Catch ex As Exception
+            MostrarMensajeError(ex.Message)
+        End Try
+
     End Sub
 
     Private Sub F0_Comprobante_FormClosing(sender As Object, e As FormClosingEventArgs) Handles MyBase.FormClosing
