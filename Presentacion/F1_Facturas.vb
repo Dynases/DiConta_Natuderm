@@ -243,6 +243,10 @@ Public Class F1_Facturas
     End Function
 
     Public Overrides Sub _PMOEliminarRegistro()
+        Dim mensaje As String = ""
+        If L_VerificarExisteComprobante(tbNumi.Text) Then
+            mensaje = ""
+        End If
         Dim info As New TaskDialogInfo("¿esta seguro de eliminar el registro?".ToUpper, eTaskDialogIcon.Delete, "advertencia".ToUpper, "mensaje principal".ToUpper, eTaskDialogButton.Yes Or eTaskDialogButton.Cancel, eTaskDialogBackgroundColor.Blue)
         Dim result As eTaskDialogResult = TaskDialog.Show(info)
         If result = eTaskDialogResult.Yes Then
@@ -476,6 +480,10 @@ Public Class F1_Facturas
 
     Private Sub tbImporteBaseCreditoFiscal_ValueChanged(sender As Object, e As EventArgs) Handles tbImporteBaseCreditoFiscal.ValueChanged
         tbCreditoFiscal.Value = tbImporteBaseCreditoFiscal.Value * 0.13
+    End Sub
+
+    Private Sub btnEliminar_Click(sender As Object, e As EventArgs) Handles btnEliminar.Click
+
     End Sub
 #End Region
 

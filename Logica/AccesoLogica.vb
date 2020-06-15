@@ -5615,7 +5615,17 @@ Sucursal.canumi =ZY003.ydsuc" + _Cadena
 
         Return _Tabla
     End Function
+    Public Shared Function L_VerificarExisteComprobante(numeroFactura As String) As Boolean
+        Dim _Tabla As DataTable
 
+        _Tabla = D_Datos_Tabla("count(*)", "TO0011", " obnumi IN (SELECT fcanumito11 FROM TFC001 WHERE fcanfac = '" + numeroFactura + "')")
+
+        If _Tabla.Rows.Count = 0 Then
+            Return False
+        Else
+            Return True
+        End If
+    End Function
     Public Shared Function L_prCompraComprobanteBorrar(_numi As String, ByRef _mensaje As String) As Boolean
 
         Dim _resultado As Boolean
@@ -5626,7 +5636,7 @@ Sucursal.canumi =ZY003.ydsuc" + _Cadena
             Dim _listParam As New List(Of Datos.DParametro)
 
             _listParam.Add(New Datos.DParametro("@tipo", -1))
-            _listParam.Add(New Datos.DParametro("@fcanumi", _numi))
+            _listParam.Add(New Datos.DParametro("@numi", _numi))
             _listParam.Add(New Datos.DParametro("@uact", L_Usuario))
 
             _Tabla = D_ProcedimientoConParam("sp_dg_TFC001", _listParam)

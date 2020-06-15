@@ -3137,37 +3137,12 @@ ControlChars.Lf & "Stack Trace:" & ControlChars.Lf & e.StackTrace
     End Sub
     Private Function VerificarExistenciaFacturaEnDetalle() As Boolean
         Try
-            'Dim cantidadRepetido As Integer = 0
-
-            'Dim tDetalle As DataTable = CType(grDetalle.DataSource, DataTable)
-            'Dim tCopyDetalle As DataTable = tDetalle.Copy
-
-            'Dim codCuentaCreditoFiscal As Integer = 24
-            'tCopyDetalle.DefaultView.RowFilter = "obcuenta =  " + codCuentaCreditoFiscal.ToString() + " And estado >= 0 AND estado is not NULL"
-            'cantidadRepetido = tCopyDetalle.DefaultView.Count()
-            ''tDetalle.DefaultView.ToTable()
-
-            'If cantidadRepetido = 0 Then
-            '    Return True
-            'Else
-            '    If _EsNuevo Then
-            '        Return True
-            '        'Throw New Exception("Existe factura, elimine la fila y registre uno nuevo.")
-            '    Else
-            '        If grDetalle.GetValue("obCuenta") = 24 Then
-            '            Throw New Exception("Existe factura, usar programa de Factura para modficar el mismo.")
-            '        End If
-
-            '    End If
-            'End If
             If _EsNuevo Then
                 Return True
-                'Throw New Exception("Existe factura, elimine la fila y registre uno nuevo.")
             Else
                 If grDetalle.GetValue("obCuenta") = 24 And grDetalle.GetValue("estado") >= 1 Then
                     Throw New Exception("Existe factura, usar programa de Factura para modficar el mismo.")
                 End If
-
             End If
         Catch ex As Exception
             MostrarMensajeError(ex.Message)
