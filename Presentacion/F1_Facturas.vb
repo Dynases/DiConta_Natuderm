@@ -12,6 +12,14 @@ Public Class F1_Facturas
     Public _tab As SuperTabItem
     Public _modulo As SideNavItem
 
+    ''Variables para la Modificación de Facturas
+    Public _modFac As Boolean = False
+    Public _numRegistro As Integer = 0
+    Public _FacturaModif As Boolean = False
+    Public _obs As String
+    Public _debebs As Double
+
+
 #Region "Variable MArco"
     Dim TableEmpleado As DataTable
     'Public axCZKEM1 As New zkemkeeper.CZKEM
@@ -45,6 +53,10 @@ Public Class F1_Facturas
 
         btnNuevo.Visible = False
         ''btnEliminar.Visible = False
+
+        If _modFac = True Then
+            _PMOMostrarRegistroDesdeComprobante(_numRegistro)
+        End If
     End Sub
 
     Private Sub _prCargarComboLibreria(mCombo As Janus.Windows.GridEX.EditControls.MultiColumnCombo, cod1 As String, cod2 As String)
@@ -100,8 +112,15 @@ Public Class F1_Facturas
             _PMPrimerRegistro()
 
         Else
-            _modulo.Select()
-            _tab.Close()
+            If _modFac = False Then
+                _modulo.Select()
+                _tab.Close()
+            Else
+                Close()
+                _modFac = False
+                _numRegistro = 0
+            End If
+
         End If
     End Sub
 #End Region
@@ -236,7 +255,16 @@ Public Class F1_Facturas
         If res Then
 
             ToastNotification.Show(Me, "Codigo de factura ".ToUpper + tbNumi.Text + " modificado con Exito.".ToUpper, My.Resources.GRABACION_EXITOSA, 5000, eToastGlowColor.Green, eToastPosition.TopCenter)
-            _PSalirRegistro()
+            If _modFac = True Then
+                _FacturaModif = True
+                _obs = TbiNroFactura.Text
+                _debebs = Convert.ToDouble(tbCreditoFiscal.Text)
+                btnGrabar.Enabled = False
+                _PSalirRegistro()
+            Else
+                _PSalirRegistro()
+            End If
+
 
         End If
         Return res
@@ -416,6 +444,39 @@ Public Class F1_Facturas
         End With
 
         LblPaginacion.Text = Str(_MPos + 1) + "/" + JGrM_Buscador.RowCount.ToString
+
+    End Sub
+    Public Sub _PMOMostrarRegistroDesdeComprobante(_N As Integer)
+
+
+        Dim dtFiltro = CType(JGrM_Buscador.DataSource, DataTable)
+        Dim fila As DataRow() = dtFiltro.Select("fcanumito11=" & _N)
+        'JGrM_Buscador.Row = 
+        JGrM_Buscador.DataSource = dtFiltro.Select("fcanumito11=" & _N).CopyToDataTable
+
+        'With JGrM_Buscador
+        '    tbNumi.Text = .GetValue("fcanumi").ToString
+        '    DtiFechaFactura.Value = .GetValue("fcafdoc")
+        '    TbNit.Text = .GetValue("fcanit")
+        '    TbRazonSocial.Text = .GetValue("fcarsocial")
+        '    TbiNroFactura.Value = .GetValue("fcanfac")
+        '    tbDui.Value = .GetValue("fcandui")
+        '    TbNroAutorizacion.Text = .GetValue("fcaautoriz")
+        '    TbdMontoFactura.Value = .GetValue("fcaitc")
+        '    tbSujetoCreditoFiscal.Value = .GetValue("fcanscf")
+        '    TbSubTotal.Value = .GetValue("fcasubtotal")
+        '    TbdDescuento.Value = .GetValue("fcadesc")
+        '    tbImporteBaseCreditoFiscal.Value = .GetValue("fcaibcf")
+        '    tbCreditoFiscal.Value = .GetValue("fcacfiscal")
+
+        '    TbCodigoControl.Text = .GetValue("fcaccont")
+
+        '    tbTipo.Value = IIf(IsDBNull(.GetValue("fcatcom")), -1, .GetValue("fcatcom"))
+
+
+        'End With
+
+        'LblPaginacion.Text = Str(_MPos + 1) + "/" + JGrM_Buscador.RowCount.ToString
 
     End Sub
     Public Overrides Sub _PMOHabilitarFocus()

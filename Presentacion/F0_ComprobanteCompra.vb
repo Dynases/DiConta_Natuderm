@@ -267,11 +267,11 @@ Public Class F0_ComprobanteCompra
 
     Private Sub ButtonX2_Click(sender As Object, e As EventArgs) Handles ButtonX2.Click
         seleccionado = False
-        If (Not TbNit.Text.Trim.Equals("0")) Then
-            L_Grabar_Nit(TbNit.Text.Trim, TbRazonSocial.Text.Trim, "")
-        Else
-            L_Grabar_Nit(TbNit.Text, "S/N", "")
-        End If
+        'If (Not TbNit.Text.Trim.Equals("0")) Then
+        '    L_Grabar_Nit(TbNit.Text.Trim, TbRazonSocial.Text.Trim, "")
+        'Else
+        '    L_Grabar_Nit(TbNit.Text, "S/N", "")
+        'End If
         Me.Close()
     End Sub
 

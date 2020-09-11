@@ -26,6 +26,8 @@ Public Class F0_Comprobante
     Private _numiAuxMod As Integer = 0
     Private _numiAuxSuc As Integer = 0
     Private _EsNuevo As Boolean = False
+
+
 #End Region
 
 #Region "VARIABLES LOCALES"
@@ -621,6 +623,9 @@ ControlChars.Lf & "Stack Trace:" & ControlChars.Lf & e.StackTrace
             .Visible = False
             .DefaultValue = 0
         End With
+        With grDetalle.RootTable.Columns("FacComprobante")
+            .Visible = False
+        End With
 
         With grDetalle.RootTable.Columns("imgCompra")
             .HeaderAlignment = TextAlignment.Center
@@ -658,6 +663,13 @@ ControlChars.Lf & "Stack Trace:" & ControlChars.Lf & e.StackTrace
 
         'cargar la grilla donde se va a poner la diferencia
         '_prCargarGridDetalle2()
+
+
+        'Pinta de otro color cuando hay una cuenta de Credito Fiscal
+        Dim fc As GridEXFormatCondition
+        fc = New GridEXFormatCondition(grDetalle.RootTable.Columns("FacComprobante"), ConditionOperator.Equal, True)
+        fc.FormatStyle.BackColor = Color.SteelBlue
+        grDetalle.RootTable.FormatConditions.Add(fc)
 
     End Sub
 
@@ -861,6 +873,9 @@ ControlChars.Lf & "Stack Trace:" & ControlChars.Lf & e.StackTrace
         End With
 
         With grDetalle.RootTable.Columns("descCobrar")
+            .Visible = False
+        End With
+        With grDetalle.RootTable.Columns("FacComprobante")
             .Visible = False
         End With
 
@@ -1954,6 +1969,7 @@ ControlChars.Lf & "Stack Trace:" & ControlChars.Lf & e.StackTrace
         panelAyudaCuenta.Visible = False
 
         PanelInferior.Visible = True
+        swIntegracion.IsReadOnly = True
 
         'tbBalanceBs.IsReadOnly = True
         'tbBalanceSus.IsReadOnly = True
@@ -1985,6 +2001,8 @@ ControlChars.Lf & "Stack Trace:" & ControlChars.Lf & e.StackTrace
         tbDiferenciaSus.Text = ""
 
         _detalleDetalleCompras.Rows.Clear()
+
+        swIntegracion.Value = False
     End Sub
 
     Public Sub _PMOLimpiarErrores()
@@ -2185,6 +2203,7 @@ ControlChars.Lf & "Stack Trace:" & ControlChars.Lf & e.StackTrace
         listEstCeldas.Add(New Modelos.Celda("oaglosa", True, "GLOSA", 200))
         listEstCeldas.Add(New Modelos.Celda("oaobs", True, "OBSERVACION", 200))
         listEstCeldas.Add(New Modelos.Celda("oaemp", False))
+        listEstCeldas.Add(New Modelos.Celda("integracion", False))
 
         Return listEstCeldas
     End Function
@@ -2203,6 +2222,7 @@ ControlChars.Lf & "Stack Trace:" & ControlChars.Lf & e.StackTrace
             tbTipoCambio.Value = .GetValue("oatc")
             tbGlosa.Text = .GetValue("oaglosa").ToString
             tbObs.Text = .GetValue("oaobs").ToString
+            swIntegracion.Value = .GetValue("integracion")
 
             'lbFecha.Text = CType(.GetValue("ybfact"), Date).ToString("dd/MM/yyyy")
             'lbHora.Text = .GetValue("ybhact").ToString
@@ -2977,8 +2997,8 @@ ControlChars.Lf & "Stack Trace:" & ControlChars.Lf & e.StackTrace
                             grAyudaCuenta.Tag = -2
                         Else
                             If grAyudaCuenta.GetValue("isCompra") = 1 Then
-                                If VerificarExistenciaFacturaEnDetalle() Then
-                                    Dim frm As New F0_ComprobanteCompra
+                                'If VerificarExistenciaFacturaEnDetalle() Then
+                                Dim frm As New F0_ComprobanteCompra
                                     frm._detalleCompras = _detalleDetalleCompras
                                     'frm._NumeroFactura =
                                     frm.ShowDialog()
@@ -2986,9 +3006,9 @@ ControlChars.Lf & "Stack Trace:" & ControlChars.Lf & e.StackTrace
                                         grDetalle.SetValue("numiCompra", _detalleDetalleCompras.Rows.Count)
                                         grDetalle.SetValue("obobs", "F:" + frm.tbinrofactura.Text)
                                         grDetalle.SetValue("obdebebs", frm.tbCreditoFiscal.Text)
-                                        grDetalle.SetValue("obdebeus", Convert.ToDouble(frm.tbCreditoFiscal.Text) / tbTipoCambio.Value)
-                                        'inserto la imagen para que puedan editar el comprobante
-                                        _prInsertarImagen()
+                                    grDetalle.SetValue("obdebeus", Math.Round((Convert.ToDouble(frm.tbCreditoFiscal.Text) / tbTipoCambio.Value), 2))
+                                    'inserto la imagen para que puedan editar el comprobante
+                                    _prInsertarImagen()
                                     End If
 
 
@@ -3001,8 +3021,8 @@ ControlChars.Lf & "Stack Trace:" & ControlChars.Lf & e.StackTrace
 
                                         panelAyudaCuenta.Visible = False
                                     End If
-                                End If
-                            Else
+                                    'End If
+                                Else
                                     'verificar si tiene aux1 para mandarlo a buscar el auxiliar 1
                                     If grDetalle.GetValue("numAux") >= 1 Then
                                     _prCargarGridAyudaAuxiliar(1, _numiAuxMod)
@@ -3303,5 +3323,37 @@ ControlChars.Lf & "Stack Trace:" & ControlChars.Lf & e.StackTrace
                 L_prComprobanteGrabarRespaldo(gi_userNumi, dtDetalle)
             End If
         End If
+    End Sub
+
+    Private Sub MODIFICARFACTURAToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles MODIFICARFACTURAToolStripMenuItem.Click
+        Try
+            If grDetalle.GetValue("FacComprobante") = True And grDetalle.GetValue("estado") >= 1 Then
+                Dim obnumi = grDetalle.GetValue("obnumi")
+                Dim frm As New F1_Facturas
+                frm._nameButton = "btTranFacturas"
+                frm._modFac = True
+                frm._numRegistro = obnumi
+                frm.ShowDialog()
+
+                If frm._FacturaModif = True Then
+                    grDetalle.SetValue("obobs", "F:" + frm._obs)
+                    grDetalle.SetValue("obdebebs", frm._debebs)
+                    grDetalle.SetValue("obdebeus", Math.Round((frm._debebs / tbTipoCambio.Value), 2))
+                    'inserto la imagen para que puedan editar el comprobante
+                    _prInsertarImagen()
+                    _FacturaModif = False
+
+
+                End If
+            Else
+                Dim img As Bitmap = New Bitmap(My.Resources.cancel, 50, 50)
+                ToastNotification.Show(Me, "NO HAY FACTURA ASOCIADA A ESTA CUENTA ".ToUpper, img, 2000, eToastGlowColor.Red, eToastPosition.BottomCenter)
+
+            End If
+
+        Catch ex As Exception
+            MostrarMensajeError(ex.Message)
+        End Try
+
     End Sub
 End Class

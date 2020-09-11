@@ -70,6 +70,7 @@ Partial Class F0_Comprobante
         Me.cmOpcionesDetalle = New System.Windows.Forms.ContextMenuStrip(Me.components)
         Me.ELIMINARToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.INSERTARFILAToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.MODIFICARFACTURAToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ButtonX2 = New DevComponents.DotNetBar.ButtonX()
         Me.ButtonX1 = New DevComponents.DotNetBar.ButtonX()
         Me.ButtonX3 = New DevComponents.DotNetBar.ButtonX()
@@ -78,6 +79,8 @@ Partial Class F0_Comprobante
         Me.ToolStripMenuItem1 = New System.Windows.Forms.ToolStripMenuItem()
         Me.btRecuperar = New DevComponents.DotNetBar.ButtonX()
         Me.timerRecuperacion = New System.Windows.Forms.Timer(Me.components)
+        Me.swIntegracion = New DevComponents.DotNetBar.Controls.SwitchButton()
+        Me.LabelX14 = New DevComponents.DotNetBar.LabelX()
         CType(Me.SuperTabPrincipal, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuperTabPrincipal.SuspendLayout()
         Me.SuperTabControlPanelBuscador.SuspendLayout()
@@ -701,6 +704,8 @@ Partial Class F0_Comprobante
         Me.GroupPanel2.CanvasColor = System.Drawing.SystemColors.Control
         Me.GroupPanel2.ColorSchemeStyle = DevComponents.DotNetBar.eDotNetBarStyle.Office2007
         Me.GroupPanel2.ColorTable = DevComponents.DotNetBar.Controls.ePanelColorTable.Green
+        Me.GroupPanel2.Controls.Add(Me.LabelX14)
+        Me.GroupPanel2.Controls.Add(Me.swIntegracion)
         Me.GroupPanel2.Controls.Add(Me.btnNuevoTipoCambio)
         Me.GroupPanel2.Controls.Add(Me.tbNumi)
         Me.GroupPanel2.Controls.Add(Me.tbTipoCambio)
@@ -889,7 +894,7 @@ Partial Class F0_Comprobante
         Me.tbAnio.Border.Class = "TextBoxBorder"
         Me.tbAnio.Border.CornerType = DevComponents.DotNetBar.eCornerType.Square
         Me.tbAnio.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.tbAnio.Location = New System.Drawing.Point(177, 83)
+        Me.tbAnio.Location = New System.Drawing.Point(0, 101)
         Me.tbAnio.Name = "tbAnio"
         Me.tbAnio.PreventEnterBeep = True
         Me.tbAnio.Size = New System.Drawing.Size(72, 22)
@@ -931,7 +936,7 @@ Partial Class F0_Comprobante
         Me.tbMes.Border.Class = "TextBoxBorder"
         Me.tbMes.Border.CornerType = DevComponents.DotNetBar.eCornerType.Square
         Me.tbMes.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.tbMes.Location = New System.Drawing.Point(255, 83)
+        Me.tbMes.Location = New System.Drawing.Point(78, 101)
         Me.tbMes.Name = "tbMes"
         Me.tbMes.PreventEnterBeep = True
         Me.tbMes.Size = New System.Drawing.Size(72, 22)
@@ -1058,23 +1063,29 @@ Partial Class F0_Comprobante
         'cmOpcionesDetalle
         '
         Me.cmOpcionesDetalle.ImageScalingSize = New System.Drawing.Size(24, 24)
-        Me.cmOpcionesDetalle.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ELIMINARToolStripMenuItem, Me.INSERTARFILAToolStripMenuItem})
+        Me.cmOpcionesDetalle.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ELIMINARToolStripMenuItem, Me.INSERTARFILAToolStripMenuItem, Me.MODIFICARFACTURAToolStripMenuItem})
         Me.cmOpcionesDetalle.Name = "ContextMenuStrip1"
-        Me.cmOpcionesDetalle.Size = New System.Drawing.Size(164, 76)
+        Me.cmOpcionesDetalle.Size = New System.Drawing.Size(204, 112)
         '
         'ELIMINARToolStripMenuItem
         '
         Me.ELIMINARToolStripMenuItem.Image = Global.Presentacion.My.Resources.Resources.elim_fila2
         Me.ELIMINARToolStripMenuItem.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None
         Me.ELIMINARToolStripMenuItem.Name = "ELIMINARToolStripMenuItem"
-        Me.ELIMINARToolStripMenuItem.Size = New System.Drawing.Size(163, 36)
+        Me.ELIMINARToolStripMenuItem.Size = New System.Drawing.Size(203, 36)
         Me.ELIMINARToolStripMenuItem.Text = "ELIMINAR"
         '
         'INSERTARFILAToolStripMenuItem
         '
         Me.INSERTARFILAToolStripMenuItem.Name = "INSERTARFILAToolStripMenuItem"
-        Me.INSERTARFILAToolStripMenuItem.Size = New System.Drawing.Size(163, 36)
+        Me.INSERTARFILAToolStripMenuItem.Size = New System.Drawing.Size(203, 36)
         Me.INSERTARFILAToolStripMenuItem.Text = "INSERTAR FILA"
+        '
+        'MODIFICARFACTURAToolStripMenuItem
+        '
+        Me.MODIFICARFACTURAToolStripMenuItem.Name = "MODIFICARFACTURAToolStripMenuItem"
+        Me.MODIFICARFACTURAToolStripMenuItem.Size = New System.Drawing.Size(203, 36)
+        Me.MODIFICARFACTURAToolStripMenuItem.Text = "MODIFICAR FACTURA"
         '
         'ButtonX2
         '
@@ -1181,6 +1192,38 @@ Partial Class F0_Comprobante
         Me.timerRecuperacion.Enabled = True
         Me.timerRecuperacion.Interval = 30000
         '
+        'swIntegracion
+        '
+        '
+        '
+        '
+        Me.swIntegracion.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square
+        Me.swIntegracion.Location = New System.Drawing.Point(258, 78)
+        Me.swIntegracion.Name = "swIntegracion"
+        Me.swIntegracion.OffBackColor = System.Drawing.Color.Orange
+        Me.swIntegracion.OffText = "NO"
+        Me.swIntegracion.OffTextColor = System.Drawing.Color.White
+        Me.swIntegracion.OnBackColor = System.Drawing.Color.Green
+        Me.swIntegracion.OnText = "SI "
+        Me.swIntegracion.OnTextColor = System.Drawing.Color.Black
+        Me.swIntegracion.Size = New System.Drawing.Size(65, 23)
+        Me.swIntegracion.Style = DevComponents.DotNetBar.eDotNetBarStyle.StyleManagerControlled
+        Me.swIntegracion.TabIndex = 249
+        '
+        'LabelX14
+        '
+        Me.LabelX14.BackColor = System.Drawing.Color.Transparent
+        '
+        '
+        '
+        Me.LabelX14.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square
+        Me.LabelX14.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.LabelX14.Location = New System.Drawing.Point(174, 78)
+        Me.LabelX14.Name = "LabelX14"
+        Me.LabelX14.Size = New System.Drawing.Size(80, 23)
+        Me.LabelX14.TabIndex = 250
+        Me.LabelX14.Text = "INTEGRACIÓN:"
+        '
         'F0_Comprobante
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -1280,4 +1323,7 @@ Partial Class F0_Comprobante
     Friend WithEvents tbDiferenciaSus As DevComponents.DotNetBar.Controls.TextBoxX
     Protected WithEvents btRecuperar As DevComponents.DotNetBar.ButtonX
     Friend WithEvents timerRecuperacion As Timer
+    Friend WithEvents MODIFICARFACTURAToolStripMenuItem As ToolStripMenuItem
+    Friend WithEvents LabelX14 As DevComponents.DotNetBar.LabelX
+    Friend WithEvents swIntegracion As DevComponents.DotNetBar.Controls.SwitchButton
 End Class
