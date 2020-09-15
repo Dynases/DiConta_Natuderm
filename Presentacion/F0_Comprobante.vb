@@ -2939,6 +2939,12 @@ ControlChars.Lf & "Stack Trace:" & ControlChars.Lf & e.StackTrace
         Dim c As Integer = grAyudaCuenta.Col
         If e.KeyData = Keys.Enter And c >= 0 And f >= 0 And btnGrabar.Enabled = True Then
             If grAyudaCuenta.Tag = 0 Then 'significa que esta poniendo una cuenta
+                If (grAyudaCuenta.GetValue("caniv") <= 4) Then
+                    ToastNotification.Show(Me, "Error: La cuenta seleccionada no corresponde a una cuenta operacional".ToUpper, My.Resources.WARNING, 3000, eToastGlowColor.Blue, eToastPosition.TopCenter)
+
+                    Return
+                End If
+
                 If True Then 'grAyudaCuenta.GetValue("caniv") = 5
                     Dim numiCuenta As String = grAyudaCuenta.GetValue("canumi")
                     Dim cod As String = grAyudaCuenta.GetValue("cacta")
@@ -2999,32 +3005,33 @@ ControlChars.Lf & "Stack Trace:" & ControlChars.Lf & e.StackTrace
                             If grAyudaCuenta.GetValue("isCompra") = 1 Then
                                 'If VerificarExistenciaFacturaEnDetalle() Then
                                 Dim frm As New F0_ComprobanteCompra
-                                    frm._detalleCompras = _detalleDetalleCompras
-                                    'frm._NumeroFactura =
-                                    frm.ShowDialog()
-                                    If frm.seleccionado = True Then
-                                        grDetalle.SetValue("numiCompra", _detalleDetalleCompras.Rows.Count)
-                                        grDetalle.SetValue("obobs", "F:" + frm.tbinrofactura.Text)
-                                        grDetalle.SetValue("obdebebs", frm.tbCreditoFiscal.Text)
+                                frm._detalleCompras = _detalleDetalleCompras
+                                'frm._NumeroFactura =
+                                frm.ShowDialog()
+                                If frm.seleccionado = True Then
+                                    grDetalle.SetValue("numiCompra", _detalleDetalleCompras.Rows.Count)
+                                    grDetalle.SetValue("obobs", "F:" + frm.tbinrofactura.Text)
+                                    grDetalle.SetValue("obdebebs", frm.tbCreditoFiscal.Text)
                                     grDetalle.SetValue("obdebeus", Math.Round((Convert.ToDouble(frm.tbCreditoFiscal.Text) / tbTipoCambio.Value), 2))
+
                                     'inserto la imagen para que puedan editar el comprobante
                                     _prInsertarImagen()
-                                    End If
+                                End If
 
 
-                                    'verificar si tiene aux1 para mandarlo a buscar el auxiliar 1
-                                    If grDetalle.GetValue("numAux") >= 1 Then
-                                        _prCargarGridAyudaAuxiliar(1, _numiAuxMod)
-                                    Else
-                                        grDetalle.Focus()
-                                        grDetalle.Col = grDetalle.RootTable.Columns("obobs").Index
-
-                                        panelAyudaCuenta.Visible = False
-                                    End If
-                                    'End If
+                                'verificar si tiene aux1 para mandarlo a buscar el auxiliar 1
+                                If grDetalle.GetValue("numAux") >= 1 Then
+                                    _prCargarGridAyudaAuxiliar(1, _numiAuxMod)
                                 Else
-                                    'verificar si tiene aux1 para mandarlo a buscar el auxiliar 1
-                                    If grDetalle.GetValue("numAux") >= 1 Then
+                                    grDetalle.Focus()
+                                    grDetalle.Col = grDetalle.RootTable.Columns("obobs").Index
+
+                                    panelAyudaCuenta.Visible = False
+                                End If
+                                'End If
+                            Else
+                                'verificar si tiene aux1 para mandarlo a buscar el auxiliar 1
+                                If grDetalle.GetValue("numAux") >= 1 Then
                                     _prCargarGridAyudaAuxiliar(1, _numiAuxMod)
                                 Else
                                     grDetalle.Focus()
@@ -3150,8 +3157,20 @@ ControlChars.Lf & "Stack Trace:" & ControlChars.Lf & e.StackTrace
                 Return
             End If
         End If
+        If e.KeyData = Keys.Escape Then
+            _DesHabilitarAyuda()
+        End If
     End Sub
+    Private Sub _DesHabilitarAyuda()
+        If (panelAyudaCuenta.Visible = True) Then
+            panelAyudaCuenta.Visible = False
+            PanelInferior.Visible = True
+            'grDetalle.Select()
+            'grDetalle.Col = 4
+            'grDetalle.Row = grDetalle.RowCount - 1
+        End If
 
+    End Sub
     Private Sub ButtonX2_Click(sender As Object, e As EventArgs) Handles ButtonX2.Click
         _prImportar()
     End Sub
@@ -3339,10 +3358,10 @@ ControlChars.Lf & "Stack Trace:" & ControlChars.Lf & e.StackTrace
                     grDetalle.SetValue("obobs", "F:" + frm._obs)
                     grDetalle.SetValue("obdebebs", frm._debebs)
                     grDetalle.SetValue("obdebeus", Math.Round((frm._debebs / tbTipoCambio.Value), 2))
+                    grDetalle.SetValue("estado", 2)
                     'inserto la imagen para que puedan editar el comprobante
                     _prInsertarImagen()
                     _FacturaModif = False
-
 
                 End If
             Else

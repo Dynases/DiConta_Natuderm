@@ -286,7 +286,6 @@ Partial Class F1_ServicioVenta
         '
         'btnUltimo
         '
-        Me.btnUltimo.Location = New System.Drawing.Point(129, 0)
         Me.btnUltimo.Margin = New System.Windows.Forms.Padding(37, 21, 37, 21)
         '
         'btnSiguiente

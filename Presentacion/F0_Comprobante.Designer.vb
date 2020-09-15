@@ -46,6 +46,8 @@ Partial Class F0_Comprobante
         Me.tbObs = New DevComponents.DotNetBar.Controls.TextBoxX()
         Me.LabelX7 = New DevComponents.DotNetBar.LabelX()
         Me.GroupPanel2 = New DevComponents.DotNetBar.Controls.GroupPanel()
+        Me.LabelX14 = New DevComponents.DotNetBar.LabelX()
+        Me.swIntegracion = New DevComponents.DotNetBar.Controls.SwitchButton()
         Me.btnNuevoTipoCambio = New DevComponents.DotNetBar.ButtonX()
         Me.tbNumi = New DevComponents.DotNetBar.Controls.TextBoxX()
         Me.tbTipoCambio = New DevComponents.Editors.DoubleInput()
@@ -79,8 +81,6 @@ Partial Class F0_Comprobante
         Me.ToolStripMenuItem1 = New System.Windows.Forms.ToolStripMenuItem()
         Me.btRecuperar = New DevComponents.DotNetBar.ButtonX()
         Me.timerRecuperacion = New System.Windows.Forms.Timer(Me.components)
-        Me.swIntegracion = New DevComponents.DotNetBar.Controls.SwitchButton()
-        Me.LabelX14 = New DevComponents.DotNetBar.LabelX()
         CType(Me.SuperTabPrincipal, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuperTabPrincipal.SuspendLayout()
         Me.SuperTabControlPanelBuscador.SuspendLayout()
@@ -757,6 +757,38 @@ Partial Class F0_Comprobante
         Me.GroupPanel2.TabIndex = 128
         Me.GroupPanel2.Text = "DATOS DE COMPROBANTE"
         '
+        'LabelX14
+        '
+        Me.LabelX14.BackColor = System.Drawing.Color.Transparent
+        '
+        '
+        '
+        Me.LabelX14.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square
+        Me.LabelX14.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.LabelX14.Location = New System.Drawing.Point(174, 78)
+        Me.LabelX14.Name = "LabelX14"
+        Me.LabelX14.Size = New System.Drawing.Size(80, 23)
+        Me.LabelX14.TabIndex = 250
+        Me.LabelX14.Text = "INTEGRACIÓN:"
+        '
+        'swIntegracion
+        '
+        '
+        '
+        '
+        Me.swIntegracion.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square
+        Me.swIntegracion.Location = New System.Drawing.Point(258, 78)
+        Me.swIntegracion.Name = "swIntegracion"
+        Me.swIntegracion.OffBackColor = System.Drawing.Color.Orange
+        Me.swIntegracion.OffText = "NO"
+        Me.swIntegracion.OffTextColor = System.Drawing.Color.White
+        Me.swIntegracion.OnBackColor = System.Drawing.Color.Green
+        Me.swIntegracion.OnText = "SI "
+        Me.swIntegracion.OnTextColor = System.Drawing.Color.Black
+        Me.swIntegracion.Size = New System.Drawing.Size(65, 23)
+        Me.swIntegracion.Style = DevComponents.DotNetBar.eDotNetBarStyle.StyleManagerControlled
+        Me.swIntegracion.TabIndex = 249
+        '
         'btnNuevoTipoCambio
         '
         Me.btnNuevoTipoCambio.AccessibleRole = System.Windows.Forms.AccessibleRole.PushButton
@@ -1191,38 +1223,6 @@ Partial Class F0_Comprobante
         '
         Me.timerRecuperacion.Enabled = True
         Me.timerRecuperacion.Interval = 30000
-        '
-        'swIntegracion
-        '
-        '
-        '
-        '
-        Me.swIntegracion.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square
-        Me.swIntegracion.Location = New System.Drawing.Point(258, 78)
-        Me.swIntegracion.Name = "swIntegracion"
-        Me.swIntegracion.OffBackColor = System.Drawing.Color.Orange
-        Me.swIntegracion.OffText = "NO"
-        Me.swIntegracion.OffTextColor = System.Drawing.Color.White
-        Me.swIntegracion.OnBackColor = System.Drawing.Color.Green
-        Me.swIntegracion.OnText = "SI "
-        Me.swIntegracion.OnTextColor = System.Drawing.Color.Black
-        Me.swIntegracion.Size = New System.Drawing.Size(65, 23)
-        Me.swIntegracion.Style = DevComponents.DotNetBar.eDotNetBarStyle.StyleManagerControlled
-        Me.swIntegracion.TabIndex = 249
-        '
-        'LabelX14
-        '
-        Me.LabelX14.BackColor = System.Drawing.Color.Transparent
-        '
-        '
-        '
-        Me.LabelX14.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square
-        Me.LabelX14.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.LabelX14.Location = New System.Drawing.Point(174, 78)
-        Me.LabelX14.Name = "LabelX14"
-        Me.LabelX14.Size = New System.Drawing.Size(80, 23)
-        Me.LabelX14.TabIndex = 250
-        Me.LabelX14.Text = "INTEGRACIÓN:"
         '
         'F0_Comprobante
         '

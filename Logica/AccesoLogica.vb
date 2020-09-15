@@ -837,7 +837,28 @@ Sucursal.canumi =ZY003.ydsuc" + _Cadena
 
         Return _resultado
     End Function
+    Public Shared Function L_Comprobante(_numi As String)
+        Dim _Tabla As DataTable
 
+        Dim _listParam As New List(Of Datos.DParametro)
+
+        _listParam.Add(New Datos.DParametro("@tipo", 1))
+        _listParam.Add(New Datos.DParametro("@Numi", _numi))
+        _Tabla = D_ProcedimientoConParam("sp_dg_validaciones", _listParam)
+
+        Return _Tabla
+    End Function
+    Public Shared Function L_hijoscuenta(_numi As String)
+        Dim _Tabla As DataTable
+
+        Dim _listParam As New List(Of Datos.DParametro)
+
+        _listParam.Add(New Datos.DParametro("@tipo", 2))
+        _listParam.Add(New Datos.DParametro("@Numi", _numi))
+        _Tabla = D_ProcedimientoConParam("sp_dg_validaciones", _listParam)
+
+        Return _Tabla
+    End Function
     Public Shared Function L_prCuentaGrabarHistorial(_numi As String, _empresa As String, _cuenta As String, _desc As String, _nivel As String, _moneda As String, _tipo As String, _numiPadre As String, _programa As String, _transaccion As String) As Boolean
         Dim _resultado As Boolean
 
