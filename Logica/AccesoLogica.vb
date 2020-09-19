@@ -1787,6 +1787,32 @@ Sucursal.canumi =ZY003.ydsuc" + _Cadena
 
         Return _resultado
     End Function
+    Public Shared Function L_ExisteNumeroComprobante(_tipo As String, _anio As String, _mes As String, _num As String, _numi As String) As Boolean
+        Dim _resultado As Boolean
+
+        Dim _Tabla As DataTable
+        Dim _listParam As New List(Of Datos.DParametro)
+        _listParam.Add(New Datos.DParametro("@tipo", 11))
+        _listParam.Add(New Datos.DParametro("@oanumi", _numi))
+        _listParam.Add(New Datos.DParametro("@oatip", _tipo))
+        _listParam.Add(New Datos.DParametro("@oaano", _anio))
+        _listParam.Add(New Datos.DParametro("@oames", _mes))
+        _listParam.Add(New Datos.DParametro("@oanum", _num))
+        _listParam.Add(New Datos.DParametro("@uact", L_Usuario))
+        _Tabla = D_ProcedimientoConParam("sp_dg_TO001", _listParam)
+
+        If _Tabla.Rows.Count > 0 Then
+            If _Tabla.Rows(0).Item(0) <> 0 Then
+                Return True
+            Else
+                Return False
+            End If
+        Else
+            _resultado = False
+        End If
+
+        Return _resultado
+    End Function
 
 #End Region
 

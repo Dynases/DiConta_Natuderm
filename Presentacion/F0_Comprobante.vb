@@ -1928,7 +1928,7 @@ ControlChars.Lf & "Stack Trace:" & ControlChars.Lf & e.StackTrace
         'tbTipoCambio.IsInputReadOnly = False
         tbFecha.Enabled = True
         tbObs.ReadOnly = False
-
+        tbNum.ReadOnly = False
         PanelInferior.Visible = False
 
         If _MNuevo = True Then
@@ -2052,24 +2052,33 @@ ControlChars.Lf & "Stack Trace:" & ControlChars.Lf & e.StackTrace
             Return False
         End Try
     End Function
-
+    Private Sub MostrarMensajeOk(mensaje As String)
+        ToastNotification.Show(Me,
+                               mensaje.ToUpper,
+                               My.Resources.GRABACION_EXITOSA,
+                               5000,
+                               eToastGlowColor.Green,
+                               eToastPosition.TopCenter)
+    End Sub
     Public Function _PMOModificarRegistro() As Boolean
         Try
-            tbEmpresa.Focus()
 
+            tbEmpresa.Focus()
             Dim dtDetalle As DataTable = CType(grDetalle.DataSource, DataTable)
             _prPonerLine(dtDetalle)
-            dtDetalle = dtDetalle.DefaultView.ToTable(True, "obnumi", "obnumito1", "oblin", "obcuenta", "obaux1", "obaux2", "obaux3", "obobs", "obobs2", "obcheque", "obtc", "obdebebs", "obhaberbs", "obdebeus", "obhaberus", "estado")
+            dtDetalle = dtDetalle.DefaultView.ToTable(True, "obnumi", "obnumito1", "oblin", "obcuenta", "obaux1", "obaux2",
+                                                      "obaux3", "obobs", "obobs2", "obcheque", "obtc", "obdebebs",
+                                                      "obhaberbs", "obdebeus", "obhaberus", "estado")
 
-            Dim fecha As DateTime = New Date(tbFecha.Value.Year, tbFecha.Value.Month, tbFecha.Value.Day, Now.Hour, Now.Minute, Now.Second)
+            Dim fecha As DateTime = New Date(tbFecha.Value.Year, tbFecha.Value.Month, tbFecha.Value.Day, Now.Hour,
+                                             Now.Minute, Now.Second)
 
             Dim res As Boolean = L_prComprobanteModificar(tbNumi.Text, tbNroDoc.Text, tbTipo.Value, tbAnio.Text, tbMes.Text,
                                                           tbNum.Text, fecha.ToString("yyyy/MM/dd hh:mm:ss"), tbTipoCambio.Value,
                                                           tbGlosa.Text, tbObs.Text, gi_empresaNumi, dtDetalle, _detalleDetalle, _detalleDetalleCompras)
             If res Then
-
-                ToastNotification.Show(Me, "Codigo ".ToUpper + tbNumi.Text + " modificado con Exito.".ToUpper, My.Resources.GRABACION_EXITOSA, 5000, eToastGlowColor.Green, eToastPosition.TopCenter)
-                '_PSalirRegistro()
+                Dim mensaje = "Codigo ".ToUpper + tbNumi.Text + " modificado con Exito.".ToUpper
+                MostrarMensajeOk(mensaje)
             End If
             Return res
         Catch ex As Exception
@@ -2104,83 +2113,97 @@ ControlChars.Lf & "Stack Trace:" & ControlChars.Lf & e.StackTrace
     End Sub
     Public Function _PMOValidarCampos() As Boolean
         Dim _ok As Boolean = True
-        MEP.Clear()
-
-        If tbTipoCambio.Value = 0 Then
-            tbTipoCambio.BackgroundStyle.BackColor = Color.Red
-            MEP.SetError(tbTipoCambio, "no existe tipo de cambio para la fecha seleccionada!".ToUpper)
-            _ok = False
-        Else
-            tbTipoCambio.BackgroundStyle.BackColor = Color.White
-            MEP.SetError(tbTipoCambio, "")
-        End If
-
-        If tbTipo.SelectedIndex < 0 Then
-            tbTipo.BackColor = Color.Red
-            MEP.SetError(tbTipo, "seleccione el tipo de comprobante!".ToUpper)
-            _ok = False
-        Else
-            tbTipo.BackColor = Color.White
-            MEP.SetError(tbTipo, "")
-        End If
-
-        'verificar si esta cuadrado
-        Dim debeBs As Double = grDetalle.GetTotal(grDetalle.RootTable.Columns("obdebebs"), AggregateFunction.Sum)
-        Dim haberBs As Double = grDetalle.GetTotal(grDetalle.RootTable.Columns("obhaberbs"), AggregateFunction.Sum)
-        Dim debeSus As Double = grDetalle.GetTotal(grDetalle.RootTable.Columns("obdebeus"), AggregateFunction.Sum)
-        Dim haberSus As Double = grDetalle.GetTotal(grDetalle.RootTable.Columns("obhaberus"), AggregateFunction.Sum)
-
-        If debeBs <> haberBs Then
-            _ok = False
-            ToastNotification.Show(Me, "No se puede grabar el comprobante porque esta desbalanceado".ToUpper, My.Resources.WARNING, 3000, eToastGlowColor.Blue, eToastPosition.TopCenter)
-        End If
-
-
-        If _ok = True Then
-
-            If debeSus <> haberSus Then
-                Dim esDebe As Boolean = True
-                Dim diferencia As Double = debeSus - haberSus
-                'verifico si la diferencia es para el debe
-                If diferencia < 0 Then 'si es negativo la diferencia es para el haber
-                    esDebe = False
-                    diferencia = diferencia * -1
+        Try
+            MEP.Clear()
+            If _EsNuevo = False Then
+                If L_ExisteNumeroComprobante(tbTipo.Value, tbAnio.Text, tbMes.Text, tbNum.Text, tbNumi.Text) Then
+                    tbNum.BackColor = Color.Red
+                    Throw New Exception("Ya existe el número de comprobante introducido".ToUpper)
+                Else
+                    tbNum.BackColor = Color.White
                 End If
+            End If
 
-                If diferencia <= _difMaximaAjuste Then 'si es verdadero,pregunto sin desea hacer el ajuste automatico
-                    Dim info As New TaskDialogInfo("ajuste".ToUpper, eTaskDialogIcon.Help, "¿Desea realizar el ajuste automatico ".ToUpper + " ?", "".ToUpper, eTaskDialogButton.Yes Or eTaskDialogButton.No, eTaskDialogBackgroundColor.Blue)
-                    Dim result As eTaskDialogResult = TaskDialog.Show(info)
-                    If result = eTaskDialogResult.Yes Then
-                        Dim dt As DataTable = CType(grDetalle.DataSource, DataTable)
-                        'a.obnumi,a.obnumito1,a.oblin,a.obcuenta,b.cacta,b.cadesc,c.cadesc as cadesc2,b.camon,numAux,
-                        'obaux1,desc1,obaux2,desc2,obaux3,desc3,a.obobs,a.obobs2,a.obcheque,a.obtc,
-                        'a.obdebebs,a.obhaberbs,a.obdebeus, a.obhaberus, estado
-                        dt.Rows.Add(0, 0, 0, _numiCuentaAjuste, "", "", "", "", 0,
-                                    0, "", 0, "", 0, "", "", "", "", 0,
-                                    0, 0, IIf(esDebe = False, diferencia, 0), IIf(esDebe = True, diferencia, 0),
-                                    0, "", 0, 0, 0)
+            If tbTipoCambio.Value = 0 Then
+                tbTipoCambio.BackgroundStyle.BackColor = Color.Red
+                MEP.SetError(tbTipoCambio, "no existe tipo de cambio para la fecha seleccionada!".ToUpper)
+                _ok = False
+            Else
+                tbTipoCambio.BackgroundStyle.BackColor = Color.White
+                MEP.SetError(tbTipoCambio, "")
+            End If
 
+            If tbTipo.SelectedIndex < 0 Then
+                tbTipo.BackColor = Color.Red
+                MEP.SetError(tbTipo, "seleccione el tipo de comprobante!".ToUpper)
+                _ok = False
+            Else
+                tbTipo.BackColor = Color.White
+                MEP.SetError(tbTipo, "")
+            End If
+
+            'verificar si esta cuadrado
+            Dim debeBs As Double = grDetalle.GetTotal(grDetalle.RootTable.Columns("obdebebs"), AggregateFunction.Sum)
+            Dim haberBs As Double = grDetalle.GetTotal(grDetalle.RootTable.Columns("obhaberbs"), AggregateFunction.Sum)
+            Dim debeSus As Double = grDetalle.GetTotal(grDetalle.RootTable.Columns("obdebeus"), AggregateFunction.Sum)
+            Dim haberSus As Double = grDetalle.GetTotal(grDetalle.RootTable.Columns("obhaberus"), AggregateFunction.Sum)
+
+            If debeBs <> haberBs Then
+                _ok = False
+                ToastNotification.Show(Me, "No se puede grabar el comprobante porque esta desbalanceado".ToUpper, My.Resources.WARNING, 3000, eToastGlowColor.Blue, eToastPosition.TopCenter)
+            End If
+
+
+            If _ok = True Then
+
+                If debeSus <> haberSus Then
+                    Dim esDebe As Boolean = True
+                    Dim diferencia As Double = debeSus - haberSus
+                    'verifico si la diferencia es para el debe
+                    If diferencia < 0 Then 'si es negativo la diferencia es para el haber
+                        esDebe = False
+                        diferencia = diferencia * -1
+                    End If
+
+                    If diferencia <= _difMaximaAjuste Then 'si es verdadero,pregunto sin desea hacer el ajuste automatico
+                        Dim info As New TaskDialogInfo("ajuste".ToUpper, eTaskDialogIcon.Help, "¿Desea realizar el ajuste automatico ".ToUpper + " ?", "".ToUpper, eTaskDialogButton.Yes Or eTaskDialogButton.No, eTaskDialogBackgroundColor.Blue)
+                        Dim result As eTaskDialogResult = TaskDialog.Show(info)
+                        If result = eTaskDialogResult.Yes Then
+                            Dim dt As DataTable = CType(grDetalle.DataSource, DataTable)
+                            'a.obnumi,a.obnumito1,a.oblin,a.obcuenta,b.cacta,b.cadesc,c.cadesc as cadesc2,b.camon,numAux,
+                            'obaux1,desc1,obaux2,desc2,obaux3,desc3,a.obobs,a.obobs2,a.obcheque,a.obtc,
+                            'a.obdebebs,a.obhaberbs,a.obdebeus, a.obhaberus, estado
+                            dt.Rows.Add(0, 0, 0, _numiCuentaAjuste, "", "", "", "", 0,
+                                        0, "", 0, "", 0, "", "", "", "", 0,
+                                        0, 0, IIf(esDebe = False, diferencia, 0), IIf(esDebe = True, diferencia, 0),
+                                        0, "", 0, 0, 0)
+
+                        Else
+                            _ok = False
+                            ToastNotification.Show(Me, "No se puede grabar el comprobante porque esta desbalanceado".ToUpper, My.Resources.WARNING, 3000, eToastGlowColor.Blue, eToastPosition.TopCenter)
+                        End If
                     Else
                         _ok = False
                         ToastNotification.Show(Me, "No se puede grabar el comprobante porque esta desbalanceado".ToUpper, My.Resources.WARNING, 3000, eToastGlowColor.Blue, eToastPosition.TopCenter)
                     End If
-                Else
-                    _ok = False
-                    ToastNotification.Show(Me, "No se puede grabar el comprobante porque esta desbalanceado".ToUpper, My.Resources.WARNING, 3000, eToastGlowColor.Blue, eToastPosition.TopCenter)
+
                 End If
-
             End If
-        End If
 
-        If _MModificar = True Then
-            If tbFecha.Value.Year <> _ultimaFecha.Year Or tbFecha.Value.Month <> _ultimaFecha.Month Then
-                _ok = False
-                ToastNotification.Show(Me, "la fecha no puede ser en un año y mes distinto al ya registrado".ToUpper, My.Resources.WARNING, 3000, eToastGlowColor.Blue, eToastPosition.TopCenter)
+            If _MModificar = True Then
+                If tbFecha.Value.Year <> _ultimaFecha.Year Or tbFecha.Value.Month <> _ultimaFecha.Month Then
+                    _ok = False
+                    ToastNotification.Show(Me, "la fecha no puede ser en un año y mes distinto al ya registrado".ToUpper, My.Resources.WARNING, 3000, eToastGlowColor.Blue, eToastPosition.TopCenter)
+                End If
             End If
-        End If
 
-        MHighlighterFocus.UpdateHighlights()
-        Return _ok
+            MHighlighterFocus.UpdateHighlights()
+            Return _ok
+        Catch ex As Exception
+            MostrarMensajeError(ex.Message)
+            Return False
+        End Try
+
     End Function
 
     Public Function _PMOGetTablaBuscador() As DataTable
