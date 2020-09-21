@@ -31,7 +31,8 @@ Public Class F1_AsientosContables
 
     Dim dtTC009 As DataTable = New DataTable
     Dim dtTO00111 As DataTable
-
+    Private _numiCuentaAjuste As String
+    Private _difMaximaAjuste As Double
 #Region "Variables Multiproposito"
     '    VariableMultiproposito
     Dim Lavadero As Integer = 42
@@ -307,8 +308,16 @@ Public Class F1_AsientosContables
         _prAsignarPermisos()
         _prCargarMovimiento()
         _prInhabiliitar()
+        _prConfiguracionAjuste()
     End Sub
-
+    Private Sub _prConfiguracionAjuste()
+        'cargar datos globales
+        Dim dtGlobal As DataTable = L_prConfigGeneralEmpresa(gi_empresaNumi)
+        If dtGlobal.Rows.Count > 0 Then
+            _numiCuentaAjuste = dtGlobal.Rows(0).Item("cfnumitc11")
+            _difMaximaAjuste = dtGlobal.Rows(0).Item("cfdifmax")
+        End If
+    End Sub
     Private Sub _prCargarComboModulos(mCombo As Janus.Windows.GridEX.EditControls.MultiColumnCombo)
         Dim dt As New DataTable
         dt = L_fnListarPlantillas()
@@ -344,45 +353,59 @@ Public Class F1_AsientosContables
 
     Public Sub _prArmarCuadre(ByRef dt As DataTable)
         Try
-            Dim totaldebe As Double = dt.Compute("Sum(debe)", "")
-            Dim totalhaber As Double = dt.Compute("Sum(haber)", "")
-            Dim totaldebesus As Double = dt.Compute("Sum(debesus)", "")
-            Dim totalhabersus As Double = dt.Compute("Sum(habersus)", "")
-            Dim restantedebe As Double = 0
-            Dim restanteHaber As Double = 0
-            Dim RestanteDebeSus As Double = 0
-            Dim RestanteHaberSus As Double = 0
-            If (totaldebe > totalhaber) Then
-                restanteHaber = totaldebe - totalhaber
-            Else
-                restantedebe = totalhaber - totaldebe
-            End If
-            If (totaldebesus > totalhabersus) Then
-                RestanteHaberSus = totaldebesus - totalhabersus
-            Else
-                RestanteDebeSus = totalhabersus - totaldebesus
-            End If
-            If (restantedebe > 0 Or restanteHaber > 0 Or RestanteDebeSus > 0 Or RestanteHaberSus > 0) Then
-                Dim dtObtenerCuenta As DataTable = L_prCuentaDiferencia(652)  '''3=Lavadero
-                dt.Rows.Add(dtObtenerCuenta.Rows(0).Item("canumi"), dtObtenerCuenta.Rows(0).Item("cacta"), dtObtenerCuenta.Rows(0).Item("cadesc"), DBNull.Value, DBNull.Value, DBNull.Value, DBNull.Value, DBNull.Value, DBNull.Value, DBNull.Value, DBNull.Value, Administracion, 0)
-                dt.Rows.Add(dtObtenerCuenta.Rows(1).Item("canumi"), dtObtenerCuenta.Rows(1).Item("cacta"), dtObtenerCuenta.Rows(1).Item("cadesc"), DBNull.Value, DBNull.Value, DBNull.Value, DBNull.Value, DBNull.Value, DBNull.Value, DBNull.Value, DBNull.Value, Administracion, 0)
-                Linea = Linea + 1
-                dt.Rows.Add(dtObtenerCuenta.Rows(1).Item("canumi"), DBNull.Value, "Ajuste de Cambio", DBNull.Value, DBNull.Value, DBNull.Value, DBNull.Value, IIf(restantedebe = 0, DBNull.Value, restantedebe), IIf(restanteHaber = 0, DBNull.Value, restanteHaber), IIf(RestanteDebeSus = 0, DBNull.Value, RestanteDebeSus), IIf(RestanteHaberSus = 0, DBNull.Value, RestanteHaberSus), Administracion, Linea)
+            If dt.Rows.Count > 0 Then
+                Dim totaldebe As Double = dt.Compute("Sum(debe)", "")
+                Dim totalhaber As Double = dt.Compute("Sum(haber)", "")
+                Dim totaldebesus As Double = dt.Compute("Sum(debesus)", "")
+                Dim totalhabersus As Double = dt.Compute("Sum(habersus)", "")
+                Dim restantedebe As Double = 0
+                Dim restanteHaber As Double = 0
+                Dim RestanteDebeSus As Double = 0
+                Dim RestanteHaberSus As Double = 0
+                If (totaldebe > totalhaber) Then
+                    restanteHaber = totaldebe - totalhaber
+                Else
+                    restantedebe = totalhaber - totaldebe
+                End If
+                If (totaldebesus > totalhabersus) Then
+                    RestanteHaberSus = totaldebesus - totalhabersus
+                Else
+                    RestanteDebeSus = totalhabersus - totaldebesus
+                End If
+                If (restantedebe > 0 Or restanteHaber > 0 Or RestanteDebeSus > 0 Or RestanteHaberSus > 0) Then
+                    Dim dtObtenerCuenta As DataTable = L_prCuentaDiferencia(218)
+                    dt.Rows.Add(dtObtenerCuenta.Rows(0).Item("canumi"), dtObtenerCuenta.Rows(0).Item("cacta"), dtObtenerCuenta.Rows(0).Item("cadesc"),
+                                DBNull.Value, DBNull.Value, DBNull.Value, DBNull.Value, DBNull.Value, DBNull.Value, DBNull.Value, DBNull.Value, Administracion, 0)
 
-                conRedondeo = True
-            Else
-                conRedondeo = False
+                    dt.Rows.Add(dtObtenerCuenta.Rows(1).Item("canumi"), dtObtenerCuenta.Rows(1).Item("cacta"), dtObtenerCuenta.Rows(1).Item("cadesc"),
+                                DBNull.Value, DBNull.Value, DBNull.Value, DBNull.Value, DBNull.Value, DBNull.Value, DBNull.Value, DBNull.Value, Administracion, 0)
 
+                    Linea = Linea + 1
+                    dt.Rows.Add(dtObtenerCuenta.Rows(1).Item("canumi"), DBNull.Value, "DIFERENCIA POR REDONDEO", DBNull.Value, DBNull.Value, DBNull.Value,
+                                tbTipoCambio.Value, IIf(restantedebe = 0, DBNull.Value, restantedebe), IIf(restanteHaber = 0, DBNull.Value, restanteHaber),
+                                IIf(RestanteDebeSus = 0, DBNull.Value, RestanteDebeSus), IIf(RestanteHaberSus = 0, DBNull.Value, RestanteHaberSus),
+                                Administracion, Linea)
+                    conRedondeo = True
+                Else
+                    conRedondeo = False
+
+                End If
             End If
+
         Catch ex As Exception
-
+            MostrarMensajeError(ex.Message)
         End Try
-
-
-
     End Sub
 
+    Private Sub MostrarMensajeError(mensaje As String)
+        ToastNotification.Show(Me,
+                               mensaje.ToUpper,
+                               My.Resources.WARNING,
+                               5000,
+                               eToastGlowColor.Red,
+                               eToastPosition.TopCenter)
 
+    End Sub
 
     Public Function ObtenerTotales() As Double
         If (cbSucursal.Value >= 1) Then
@@ -1587,13 +1610,12 @@ Public Class F1_AsientosContables
                     Dim info As New TaskDialogInfo("advertencia".ToUpper, eTaskDialogIcon.Exclamation, "ajuste de cambio mayor al permitido, ¿desea grabar de todos modos?".ToUpper, "".ToUpper, eTaskDialogButton.Yes Or eTaskDialogButton.No, eTaskDialogBackgroundColor.Blue)
                     Dim result As eTaskDialogResult = TaskDialog.Show(info)
                     If result = eTaskDialogResult.Yes Then
-
                     Else
                         Return False
 
                     End If
 
-                    'ToastNotification.Show(Me, "No se puede grabar la integracion por que el ajuste de cambio es mayor al permitido".ToUpper, My.Resources.WARNING, 3000, eToastGlowColor.Blue, eToastPosition.TopCenter)
+                    ToastNotification.Show(Me, "No se puede grabar la integracion por que el ajuste de cambio es mayor al permitido".ToUpper, My.Resources.WARNING, 3000, eToastGlowColor.Blue, eToastPosition.TopCenter)
 
                 End If
 
