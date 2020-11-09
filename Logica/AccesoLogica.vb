@@ -1787,6 +1787,24 @@ Sucursal.canumi =ZY003.ydsuc" + _Cadena
 
         Return _resultado
     End Function
+    Public Shared Function L_GuardarCierreGestionHistorico(Id As Integer,
+                                                  Descripcion As String, ano As Integer, fechaReg As String, TipoEvento As Integer, transaccion As Integer) As Boolean
+        Try
+            Dim _Tabla As DataTable
+            Dim _listParam As New List(Of Datos.DParametro)
+            _listParam.Add(New Datos.DParametro("@tipo", 1))
+            _listParam.Add(New Datos.DParametro("@Id", Id))
+            _listParam.Add(New Datos.DParametro("@Anio", ano))
+            _listParam.Add(New Datos.DParametro("@Descripcion", Descripcion))
+            _listParam.Add(New Datos.DParametro("@fechaReg", fechaReg))
+            _listParam.Add(New Datos.DParametro("@Usuario", L_Usuario))
+            _listParam.Add(New Datos.DParametro("@transaccion", transaccion))
+            _Tabla = D_ProcedimientoConParamHistorial("sp_HM001", _listParam)
+            Return True
+        Catch ex As Exception
+            Throw New Exception(ex.Message)
+        End Try
+    End Function
     Public Shared Function L_ExisteNumeroComprobante(_tipo As String, _anio As String, _mes As String, _num As String, _numi As String) As Boolean
         Dim _resultado As Boolean
 
@@ -7647,4 +7665,93 @@ Sucursal.canumi =ZY003.ydsuc" + _Cadena
         Return _Tabla
     End Function
 #End Region
+#Region "Cierre de gestion"
+    Public Shared Function L_GuardarCierreGestion(ByRef Id As Integer,
+                                                  Descripcion As String, ano As Integer, fechaReg As String, TipoEvento As Integer, gestionMes As DataTable) As Boolean
+        Try
+            Dim _Tabla As DataTable
+            Dim _listParam As New List(Of Datos.DParametro)
+            _listParam.Add(New Datos.DParametro("@tipo", TipoEvento))
+            _listParam.Add(New Datos.DParametro("@Id", Id))
+            _listParam.Add(New Datos.DParametro("@Anio", ano))
+            _listParam.Add(New Datos.DParametro("@Descripcion", Descripcion))
+            _listParam.Add(New Datos.DParametro("@fechaReg", fechaReg))
+            _listParam.Add(New Datos.DParametro("@Usuario", L_Usuario))
+            _listParam.Add(New Datos.DParametro("@CierreGestionMes", "", gestionMes))
+            _Tabla = D_ProcedimientoConParam("sp_CierreGestion", _listParam)
+            If _Tabla.Rows.Count > 0 Then
+                Id = _Tabla.Rows(0).Item(0)
+            Else
+                Return False
+            End If
+            L_GuardarCierreGestionHistorico(Id, Descripcion, ano, fechaReg, TipoEvento, TipoEvento)
+            Return True
+        Catch ex As Exception
+            Throw New Exception(ex.Message)
+        End Try
+    End Function
+
+    Public Shared Function L_MostraCierreGestion() As DataTable
+        Dim _Tabla As DataTable
+        Dim _listParam As New List(Of Datos.DParametro)
+        _listParam.Add(New Datos.DParametro("@tipo", 3))
+        _listParam.Add(New Datos.DParametro("@Usuario", L_Usuario))
+        _Tabla = D_ProcedimientoConParam("sp_CierreGestion", _listParam)
+        Return _Tabla
+    End Function
+    Public Shared Function L_MostraCierreGestionDeMes(IdGestion As Integer) As DataTable
+        Dim _Tabla As DataTable
+        Dim _listParam As New List(Of Datos.DParametro)
+        _listParam.Add(New Datos.DParametro("@tipo", 4))
+        _listParam.Add(New Datos.DParametro("@Id", IdGestion))
+        _listParam.Add(New Datos.DParametro("@Usuario", L_Usuario))
+        _Tabla = D_ProcedimientoConParam("sp_CierreGestion", _listParam)
+        Return _Tabla
+    End Function
+
+    Public Shared Function VerificarAnioRepetido(anio As String) As Boolean
+        Try
+            Dim _Tabla As DataTable
+            Dim _listParam As New List(Of Datos.DParametro)
+            _listParam.Add(New Datos.DParametro("@tipo", 5))
+            _listParam.Add(New Datos.DParametro("@Descripcion", anio))
+            _Tabla = D_ProcedimientoConParam("sp_CierreGestion", _listParam)
+            If _Tabla.Rows.Count > 0 Then
+                If _Tabla.Rows(0).Item(0) = 0 Then
+                    Return False
+                Else
+                    Return True
+                End If
+            Else
+                Return False
+            End If
+            Return True
+        Catch ex As Exception
+            Throw New Exception(ex.Message)
+        End Try
+    End Function
+    Public Shared Function VerificarCierreMes(anio As String, mes As String) As Boolean
+        Try
+            Dim _Tabla As DataTable
+            Dim _listParam As New List(Of Datos.DParametro)
+            _listParam.Add(New Datos.DParametro("@tipo", 6))
+            _listParam.Add(New Datos.DParametro("@Descripcion", anio))
+            _listParam.Add(New Datos.DParametro("@Mes", mes))
+            _Tabla = D_ProcedimientoConParam("sp_CierreGestion", _listParam)
+            If _Tabla.Rows.Count > 0 Then
+                If _Tabla.Rows(0).Item(0) = 0 Then
+                    Return False
+                Else
+                    Return True
+                End If
+            Else
+                Return False
+            End If
+            Return True
+        Catch ex As Exception
+            Throw New Exception(ex.Message)
+        End Try
+    End Function
+#End Region
+
 End Class

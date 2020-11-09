@@ -30,6 +30,7 @@ Partial Class F0_LibroCompra1
         Me.TableLayoutPanelPrincipal = New System.Windows.Forms.TableLayoutPanel()
         Me.GroupPanelAciones = New DevComponents.DotNetBar.Controls.GroupPanel()
         Me.PanelExAcciones = New DevComponents.DotNetBar.PanelEx()
+        Me.btSalir = New DevComponents.DotNetBar.ButtonX()
         Me.btTxt = New DevComponents.DotNetBar.ButtonX()
         Me.btReporte = New DevComponents.DotNetBar.ButtonX()
         Me.CpExportarExcel = New DevComponents.DotNetBar.Controls.CircularProgress()
@@ -52,7 +53,6 @@ Partial Class F0_LibroCompra1
         Me.Tb2NitRazonSocial = New DevComponents.DotNetBar.Controls.TextBoxX()
         Me.LabelX5 = New DevComponents.DotNetBar.LabelX()
         Me.JanusSuperTip1 = New Janus.Windows.Common.JanusSuperTip(Me.components)
-        Me.btSalir = New DevComponents.DotNetBar.ButtonX()
         Me.PanelSuperior.SuspendLayout()
         Me.PanelInferior.SuspendLayout()
         CType(Me.BubbleBarUsuario, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -143,10 +143,6 @@ Partial Class F0_LibroCompra1
         Me.PanelPrincipal.Controls.SetChildIndex(Me.PanelSuperior, 0)
         Me.PanelPrincipal.Controls.SetChildIndex(Me.Panel1, 0)
         '
-        'btnUltimo
-        '
-        Me.btnUltimo.Location = New System.Drawing.Point(129, 0)
-        '
         'MRlAccion
         '
         '
@@ -157,11 +153,6 @@ Partial Class F0_LibroCompra1
         'PanelContent
         '
         Me.PanelContent.Controls.Add(Me.TableLayoutPanelPrincipal)
-        Me.PanelContent.Size = New System.Drawing.Size(951, 450)
-        '
-        'MSuperTabControlPanel1
-        '
-        Me.MSuperTabControlPanel1.Size = New System.Drawing.Size(951, 450)
         '
         'MSuperTabControl
         '
@@ -265,6 +256,19 @@ Partial Class F0_LibroCompra1
         Me.PanelExAcciones.Style.ForeColor.ColorSchemePart = DevComponents.DotNetBar.eColorSchemePart.PanelText
         Me.PanelExAcciones.Style.GradientAngle = 90
         Me.PanelExAcciones.TabIndex = 4
+        '
+        'btSalir
+        '
+        Me.btSalir.AccessibleRole = System.Windows.Forms.AccessibleRole.PushButton
+        Me.btSalir.ColorTable = DevComponents.DotNetBar.eButtonColor.Office2007WithBackground
+        Me.btSalir.Image = Global.Presentacion.My.Resources.Resources.atras
+        Me.btSalir.ImageFixedSize = New System.Drawing.Size(40, 40)
+        Me.btSalir.Location = New System.Drawing.Point(23, 230)
+        Me.btSalir.Name = "btSalir"
+        Me.btSalir.Size = New System.Drawing.Size(150, 50)
+        Me.btSalir.Style = DevComponents.DotNetBar.eDotNetBarStyle.StyleManagerControlled
+        Me.btSalir.TabIndex = 7
+        Me.btSalir.Text = "     Salir"
         '
         'btTxt
         '
@@ -493,7 +497,7 @@ Partial Class F0_LibroCompra1
         cbMes_DesignTimeLayout.LayoutString = resources.GetString("cbMes_DesignTimeLayout.LayoutString")
         Me.cbMes.DesignTimeLayout = cbMes_DesignTimeLayout
         Me.cbMes.DisplayMember = "sdfg"
-        Me.cbMes.Location = New System.Drawing.Point(312, 17)
+        Me.cbMes.Location = New System.Drawing.Point(312, 3)
         Me.cbMes.Name = "cbMes"
         Me.cbMes.SelectedIndex = -1
         Me.cbMes.SelectedItem = Nothing
@@ -505,7 +509,7 @@ Partial Class F0_LibroCompra1
         '
         cbAno_DesignTimeLayout.LayoutString = resources.GetString("cbAno_DesignTimeLayout.LayoutString")
         Me.cbAno.DesignTimeLayout = cbAno_DesignTimeLayout
-        Me.cbAno.Location = New System.Drawing.Point(165, 17)
+        Me.cbAno.Location = New System.Drawing.Point(165, 3)
         Me.cbAno.Name = "cbAno"
         Me.cbAno.SelectedIndex = -1
         Me.cbAno.SelectedItem = Nothing
@@ -520,7 +524,7 @@ Partial Class F0_LibroCompra1
         Me.LabelX1.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square
         Me.LabelX1.Font = New System.Drawing.Font("Georgia", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.LabelX1.ForeColor = System.Drawing.Color.FromArgb(CType(CType(15, Byte), Integer), CType(CType(72, Byte), Integer), CType(CType(127, Byte), Integer))
-        Me.LabelX1.Location = New System.Drawing.Point(3, 16)
+        Me.LabelX1.Location = New System.Drawing.Point(3, 2)
         Me.LabelX1.Name = "LabelX1"
         Me.LabelX1.Size = New System.Drawing.Size(75, 23)
         Me.LabelX1.TabIndex = 0
@@ -535,7 +539,7 @@ Partial Class F0_LibroCompra1
         Me.LabelX2.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square
         Me.LabelX2.Font = New System.Drawing.Font("Georgia", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.LabelX2.ForeColor = System.Drawing.Color.FromArgb(CType(CType(15, Byte), Integer), CType(CType(72, Byte), Integer), CType(CType(127, Byte), Integer))
-        Me.LabelX2.Location = New System.Drawing.Point(84, 16)
+        Me.LabelX2.Location = New System.Drawing.Point(84, 2)
         Me.LabelX2.Name = "LabelX2"
         Me.LabelX2.Size = New System.Drawing.Size(75, 23)
         Me.LabelX2.TabIndex = 2
@@ -550,7 +554,7 @@ Partial Class F0_LibroCompra1
         Me.LabelX3.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square
         Me.LabelX3.Font = New System.Drawing.Font("Georgia", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.LabelX3.ForeColor = System.Drawing.Color.FromArgb(CType(CType(15, Byte), Integer), CType(CType(72, Byte), Integer), CType(CType(127, Byte), Integer))
-        Me.LabelX3.Location = New System.Drawing.Point(231, 16)
+        Me.LabelX3.Location = New System.Drawing.Point(231, 2)
         Me.LabelX3.Name = "LabelX3"
         Me.LabelX3.Size = New System.Drawing.Size(75, 23)
         Me.LabelX3.TabIndex = 4
@@ -637,19 +641,6 @@ Partial Class F0_LibroCompra1
         '
         Me.JanusSuperTip1.AutoPopDelay = 2000
         Me.JanusSuperTip1.ImageList = Nothing
-        '
-        'btSalir
-        '
-        Me.btSalir.AccessibleRole = System.Windows.Forms.AccessibleRole.PushButton
-        Me.btSalir.ColorTable = DevComponents.DotNetBar.eButtonColor.Office2007WithBackground
-        Me.btSalir.Image = Global.Presentacion.My.Resources.Resources.atras
-        Me.btSalir.ImageFixedSize = New System.Drawing.Size(40, 40)
-        Me.btSalir.Location = New System.Drawing.Point(23, 230)
-        Me.btSalir.Name = "btSalir"
-        Me.btSalir.Size = New System.Drawing.Size(150, 50)
-        Me.btSalir.Style = DevComponents.DotNetBar.eDotNetBarStyle.StyleManagerControlled
-        Me.btSalir.TabIndex = 7
-        Me.btSalir.Text = "     Salir"
         '
         'F0_LibroCompra1
         '

@@ -397,16 +397,6 @@ Public Class F1_AsientosContables
         End Try
     End Sub
 
-    Private Sub MostrarMensajeError(mensaje As String)
-        ToastNotification.Show(Me,
-                               mensaje.ToUpper,
-                               My.Resources.WARNING,
-                               5000,
-                               eToastGlowColor.Red,
-                               eToastPosition.TopCenter)
-
-    End Sub
-
     Public Function ObtenerTotales() As Double
         If (cbSucursal.Value >= 1) Then
             Dim dt As DataTable = L_prObtenerPlantila(cbSucursal.Value)
@@ -1551,83 +1541,84 @@ Public Class F1_AsientosContables
         Return btnGrabar.Enabled = True
     End Function
     Public Function _ValidarCampos() As Boolean
-        If (tbTipoCambio.Value <= 0) Then
-            Dim img As Bitmap = New Bitmap(My.Resources.Mensaje, 50, 50)
-            ToastNotification.Show(Me, "Por Favor Coloque un Tipo de Cambio Valido".ToUpper, img, 2000, eToastGlowColor.Red, eToastPosition.BottomCenter)
-            tbTipoCambio.Focus()
-            Return False
+        Try
+            If VerificarCierreMes(tbFechaI.Value.Year.ToString(), tbFechaI.Value.Month.ToString()) Then
+                Throw New Exception("SE CERRO EL MES DE LA FECHA ESPECÍFICADA")
+            End If
+            If (tbTipoCambio.Value <= 0) Then
+                Dim img As Bitmap = New Bitmap(My.Resources.Mensaje, 50, 50)
+                ToastNotification.Show(Me, "Por Favor Coloque un Tipo de Cambio Valido".ToUpper, img, 2000, eToastGlowColor.Red, eToastPosition.BottomCenter)
+                tbTipoCambio.Focus()
+                Return False
 
-        End If
-        If (Lb_Saldo.Text <> 0) Then
-            Dim img As Bitmap = New Bitmap(My.Resources.Mensaje, 50, 50)
-            ToastNotification.Show(Me, "Por Favor Inserte Monto Correctos en los bancos", img, 2000, eToastGlowColor.Red, eToastPosition.BottomCenter)
-            grbanco.Focus()
-            Return False
+            End If
+            If (Lb_Saldo.Text <> 0) Then
+                Dim img As Bitmap = New Bitmap(My.Resources.Mensaje, 50, 50)
+                ToastNotification.Show(Me, "Por Favor Inserte Monto Correctos en los bancos", img, 2000, eToastGlowColor.Red, eToastPosition.BottomCenter)
+                grbanco.Focus()
+                Return False
 
-        End If
-        If (grComprobante.RowCount <= 0) Then
-            Dim img As Bitmap = New Bitmap(My.Resources.Mensaje, 50, 50)
-            ToastNotification.Show(Me, "No Existen Datos Para Guardar".ToUpper, img, 2000, eToastGlowColor.Red, eToastPosition.BottomCenter)
-            grComprobante.Focus()
-            Return False
-        End If
-        If (cbSucursal.SelectedIndex < 0) Then
-            Dim img As Bitmap = New Bitmap(My.Resources.Mensaje, 50, 50)
-            ToastNotification.Show(Me, "POR FAVOR SELECCIONE UNA SUCURSAL".ToUpper, img, 2000, eToastGlowColor.Red, eToastPosition.BottomCenter)
-            cbSucursal.Focus()
-            Return False
-
-        End If
-
-        If conRedondeo = True Then
-            'validar que el redondeo no sea mas alto que el permitido by DANNY
-            'verificar si esta cuadrado
-            'cargar datos globales
-            grComprobante.MoveLast()
-            Dim redonDebeBs As Double = IIf(IsDBNull(grComprobante.GetValue("debe")) = True, 0, grComprobante.GetValue("debe"))
-            Dim redonDebeSus As Double = IIf(IsDBNull(grComprobante.GetValue("debesus")) = True, 0, grComprobante.GetValue("debesus"))
-            Dim redonHaberBs As Double = IIf(IsDBNull(grComprobante.GetValue("haber")) = True, 0, grComprobante.GetValue("haber"))
-            Dim redonHaberSus As Double = IIf(IsDBNull(grComprobante.GetValue("habersus")) = True, 0, grComprobante.GetValue("habersus"))
-
-
-            If redonDebeBs > 0 Or redonDebeSus > 0 Or redonHaberBs > 0 Or redonHaberSus > 0 Then
-                Dim dtGlobal As DataTable = L_prConfigGeneralEmpresa(1)
-                Dim _difMaximaAjuste As Double
-                If dtGlobal.Rows.Count > 0 Then
-                    _difMaximaAjuste = dtGlobal.Rows(0).Item("cfdifmax")
-                End If
-
-                'Dim diferenciaBs As Double
-
-                Dim diferencia As Double = redonDebeSus - redonHaberSus
-                'verifico si la diferencia es para el debe
-                If diferencia < 0 Then 'si es negativo la diferencia es para el haber
-                    diferencia = diferencia * -1
-                End If
-
-
-                If diferencia > _difMaximaAjuste Then 'si es verdadero,pregunto sin desea hacer el ajuste automatico
-                    Dim info As New TaskDialogInfo("advertencia".ToUpper, eTaskDialogIcon.Exclamation, "ajuste de cambio mayor al permitido, ¿desea grabar de todos modos?".ToUpper, "".ToUpper, eTaskDialogButton.Yes Or eTaskDialogButton.No, eTaskDialogBackgroundColor.Blue)
-                    Dim result As eTaskDialogResult = TaskDialog.Show(info)
-                    If result = eTaskDialogResult.Yes Then
-                    Else
-                        Return False
-
-                    End If
-
-                    ToastNotification.Show(Me, "No se puede grabar la integracion por que el ajuste de cambio es mayor al permitido".ToUpper, My.Resources.WARNING, 3000, eToastGlowColor.Blue, eToastPosition.TopCenter)
-
-                End If
+            End If
+            If (grComprobante.RowCount <= 0) Then
+                Dim img As Bitmap = New Bitmap(My.Resources.Mensaje, 50, 50)
+                ToastNotification.Show(Me, "No Existen Datos Para Guardar".ToUpper, img, 2000, eToastGlowColor.Red, eToastPosition.BottomCenter)
+                grComprobante.Focus()
+                Return False
+            End If
+            If (cbSucursal.SelectedIndex < 0) Then
+                Dim img As Bitmap = New Bitmap(My.Resources.Mensaje, 50, 50)
+                ToastNotification.Show(Me, "POR FAVOR SELECCIONE UNA SUCURSAL".ToUpper, img, 2000, eToastGlowColor.Red, eToastPosition.BottomCenter)
+                cbSucursal.Focus()
+                Return False
 
             End If
 
+            If conRedondeo = True Then
+                'validar que el redondeo no sea mas alto que el permitido by DANNY
+                'verificar si esta cuadrado
+                'cargar datos globales
+                grComprobante.MoveLast()
+                Dim redonDebeBs As Double = IIf(IsDBNull(grComprobante.GetValue("debe")) = True, 0, grComprobante.GetValue("debe"))
+                Dim redonDebeSus As Double = IIf(IsDBNull(grComprobante.GetValue("debesus")) = True, 0, grComprobante.GetValue("debesus"))
+                Dim redonHaberBs As Double = IIf(IsDBNull(grComprobante.GetValue("haber")) = True, 0, grComprobante.GetValue("haber"))
+                Dim redonHaberSus As Double = IIf(IsDBNull(grComprobante.GetValue("habersus")) = True, 0, grComprobante.GetValue("habersus"))
 
-        End If
+
+                If redonDebeBs > 0 Or redonDebeSus > 0 Or redonHaberBs > 0 Or redonHaberSus > 0 Then
+                    Dim dtGlobal As DataTable = L_prConfigGeneralEmpresa(1)
+                    Dim _difMaximaAjuste As Double
+                    If dtGlobal.Rows.Count > 0 Then
+                        _difMaximaAjuste = dtGlobal.Rows(0).Item("cfdifmax")
+                    End If
+
+                    'Dim diferenciaBs As Double
+
+                    Dim diferencia As Double = redonDebeSus - redonHaberSus
+                    'verifico si la diferencia es para el debe
+                    If diferencia < 0 Then 'si es negativo la diferencia es para el haber
+                        diferencia = diferencia * -1
+                    End If
 
 
+                    If diferencia > _difMaximaAjuste Then 'si es verdadero,pregunto sin desea hacer el ajuste automatico
+                        Dim info As New TaskDialogInfo("advertencia".ToUpper, eTaskDialogIcon.Exclamation, "ajuste de cambio mayor al permitido, ¿desea grabar de todos modos?".ToUpper, "".ToUpper, eTaskDialogButton.Yes Or eTaskDialogButton.No, eTaskDialogBackgroundColor.Blue)
+                        Dim result As eTaskDialogResult = TaskDialog.Show(info)
+                        If result = eTaskDialogResult.Yes Then
+                        Else
+                            Return False
 
+                        End If
 
-        Return True
+                        ToastNotification.Show(Me, "No se puede grabar la integracion por que el ajuste de cambio es mayor al permitido".ToUpper, My.Resources.WARNING, 3000, eToastGlowColor.Blue, eToastPosition.TopCenter)
+
+                    End If
+
+                End If
+            End If
+            Return True
+        Catch ex As Exception
+            MostrarMensajeError(ex.Message)
+        End Try
     End Function
 
     Private Sub btnGrabar_Click(sender As Object, e As EventArgs) Handles btnGrabar.Click
@@ -1748,10 +1739,18 @@ Public Class F1_AsientosContables
     End Sub
 
     Private Sub btnModificar_Click(sender As Object, e As EventArgs) Handles btnModificar.Click
-        btnNuevo.Enabled = False
-        btnModificar.Enabled = False
-        btnGrabar.Enabled = True
-        btnEliminar.Enabled = False
+        Try
+            If VerificarCierreMes(tbFechaI.Value.Year.ToString(), tbFechaI.Value.Month.ToString()) Then
+                Throw New Exception("SE CERRO EL MES DE LA FECHA ESPECÍFICADA")
+            End If
+            btnNuevo.Enabled = False
+            btnModificar.Enabled = False
+            btnGrabar.Enabled = True
+            btnEliminar.Enabled = False
+        Catch ex As Exception
+            MostrarMensajeError(ex.Message)
+        End Try
+
 
     End Sub
 
@@ -1825,8 +1824,17 @@ Public Class F1_AsientosContables
         _LisTransacciones.Columns.Add("id", Type.GetType("System.Int32"))
 
     End Sub
+    Private Sub MostrarMensajeError(mensaje As String)
+        ToastNotification.Show(Me,
+                               mensaje.ToUpper,
+                               My.Resources.WARNING,
+                               5000,
+                               eToastGlowColor.Red,
+                               eToastPosition.TopCenter)
 
+    End Sub
     Private Sub btnNuevo_Click(sender As Object, e As EventArgs) Handles btnNuevo.Click
+
         _prhabilitar()
         _prLimpiar()
         btnNuevo.Enabled = False
@@ -2091,43 +2099,49 @@ Public Class F1_AsientosContables
     End Sub
 
     Private Sub btnEliminar_Click(sender As Object, e As EventArgs) Handles btnEliminar.Click
-        Dim ef = New Efecto
-        ef.tipo = 2
-        ef.Context = "¿esta seguro de eliminar el asiento contable?".ToUpper
-        ef.Header = "mensaje principal".ToUpper
-        ef.ShowDialog()
-        Dim bandera As Boolean = False
-        bandera = ef.band
-        If (bandera = True) Then
-            Dim mensajeError As String = ""
-            Dim res As Boolean = L_fnEliminarAsientoContable(tbNumi.Text, mensajeError)
-            If res Then
-
-
-                Dim img As Bitmap = New Bitmap(My.Resources.checked, 50, 50)
-
-                ToastNotification.Show(Me, "Código de Venta ".ToUpper + tbNumi.Text + " eliminado con Exito.".ToUpper,
-                                          img, 2000,
-                                          eToastGlowColor.Green,
-                                          eToastPosition.TopCenter)
-
-                _prCargarMovimiento()
-
-
-                _prInhabiliitar()
-                If grmovimientos.RowCount > 0 Then
-
-                    _prMostrarRegistro(0)
-
-                End If
-
-
-            Else
-                Dim img As Bitmap = New Bitmap(My.Resources.cancel, 50, 50)
-                ToastNotification.Show(Me, mensajeError, img, 2000, eToastGlowColor.Red, eToastPosition.BottomCenter)
+        Try
+            If VerificarCierreMes(tbFechaI.Value.Year.ToString(), tbFechaI.Value.Month.ToString()) Then
+                Throw New Exception("SE CERRO EL MES DE LA FECHA ESPECÍFICADA")
             End If
-        End If
+            Dim ef = New Efecto
+            ef.tipo = 2
+            ef.Context = "¿esta seguro de eliminar el asiento contable?".ToUpper
+            ef.Header = "mensaje principal".ToUpper
+            ef.ShowDialog()
+            Dim bandera As Boolean = False
+            bandera = ef.band
+            If (bandera = True) Then
+                Dim mensajeError As String = ""
+                Dim res As Boolean = L_fnEliminarAsientoContable(tbNumi.Text, mensajeError)
+                If res Then
 
+
+                    Dim img As Bitmap = New Bitmap(My.Resources.checked, 50, 50)
+
+                    ToastNotification.Show(Me, "Código de Venta ".ToUpper + tbNumi.Text + " eliminado con Exito.".ToUpper,
+                                              img, 2000,
+                                              eToastGlowColor.Green,
+                                              eToastPosition.TopCenter)
+
+                    _prCargarMovimiento()
+
+
+                    _prInhabiliitar()
+                    If grmovimientos.RowCount > 0 Then
+
+                        _prMostrarRegistro(0)
+
+                    End If
+
+
+                Else
+                    Dim img As Bitmap = New Bitmap(My.Resources.cancel, 50, 50)
+                    ToastNotification.Show(Me, mensajeError, img, 2000, eToastGlowColor.Red, eToastPosition.BottomCenter)
+                End If
+            End If
+        Catch ex As Exception
+            MostrarMensajeError(ex.Message)
+        End Try
     End Sub
 
     Private Sub grbanco_EditingCell(sender As Object, e As EditingCellEventArgs) Handles grbanco.EditingCell

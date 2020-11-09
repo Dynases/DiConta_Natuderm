@@ -2115,6 +2115,9 @@ ControlChars.Lf & "Stack Trace:" & ControlChars.Lf & e.StackTrace
         Dim _ok As Boolean = True
         Try
             MEP.Clear()
+            If VerificarCierreMes(tbFecha.Value.Year.ToString(), tbFecha.Value.Month.ToString()) Then
+                Throw New Exception("SE CERRO EL MES DE LA FECHA ESPECÍFICADA")
+            End If
             If _EsNuevo = False Then
                 If L_ExisteNumeroComprobante(tbTipo.Value, tbAnio.Text, tbMes.Text, tbNum.Text, tbNumi.Text) Then
                     tbNum.BackColor = Color.Red
@@ -2291,50 +2294,72 @@ ControlChars.Lf & "Stack Trace:" & ControlChars.Lf & e.StackTrace
     End Sub
 
     Private Sub btnNuevo_Click(sender As Object, e As EventArgs) Handles btnNuevo.Click
-        _EsNuevo = True
-        tbTipo.Focus()
-        Dim dtTipoCambio As DataTable = L_prTipoCambioGeneralPorFecha(Now.ToString("yyyy/MM/dd"))
-        If dtTipoCambio.Rows.Count = 0 Then
-            _existTipoCambio = False
-            tbTipoCambio.Value = 0
-            tbTipoCambio.BackgroundStyle.BackColor = Color.Red
-        Else
-            _existTipoCambio = True
-            tbTipoCambio.Value = dtTipoCambio.Rows(0).Item("cbdol")
-            tbTipoCambio.BackgroundStyle.BackColor = Color.White
-            MEP.SetError(tbTipoCambio, "")
+        Try
 
-            'pongo como default el tipo de cambio
-            With grDetalle.RootTable.Columns("obtc")
-                .DefaultValue = tbTipoCambio.Value
-            End With
-        End If
+            _EsNuevo = True
+            tbTipo.Focus()
+            Dim dtTipoCambio As DataTable = L_prTipoCambioGeneralPorFecha(Now.ToString("yyyy/MM/dd"))
+            If dtTipoCambio.Rows.Count = 0 Then
+                _existTipoCambio = False
+                tbTipoCambio.Value = 0
+                tbTipoCambio.BackgroundStyle.BackColor = Color.Red
+            Else
+                _existTipoCambio = True
+                tbTipoCambio.Value = dtTipoCambio.Rows(0).Item("cbdol")
+                tbTipoCambio.BackgroundStyle.BackColor = Color.White
+                MEP.SetError(tbTipoCambio, "")
 
-
-
-        _PMNuevo()
-
-        'preguntar si esta guardado un recuperar detalle
-        Dim dtRecuperar As New DataTable
-        dtRecuperar = L_prComprobanteDetalleGeneralRecuperado(gi_userNumi)
-        If dtRecuperar.Rows.Count > 0 Then
-            Dim info As New TaskDialogInfo("recuperacion de detalle".ToUpper, eTaskDialogIcon.Help, "¿Desea restaurar el ultimo comprobante?".ToUpper, "".ToUpper, eTaskDialogButton.Yes Or eTaskDialogButton.No, eTaskDialogBackgroundColor.Blue)
-            Dim result As eTaskDialogResult = TaskDialog.Show(info)
-            If result = eTaskDialogResult.Yes Then
-                _prRecuperar()
+                'pongo como default el tipo de cambio
+                With grDetalle.RootTable.Columns("obtc")
+                    .DefaultValue = tbTipoCambio.Value
+                End With
             End If
-        End If
+
+
+
+            _PMNuevo()
+
+            'preguntar si esta guardado un recuperar detalle
+            Dim dtRecuperar As New DataTable
+            dtRecuperar = L_prComprobanteDetalleGeneralRecuperado(gi_userNumi)
+            If dtRecuperar.Rows.Count > 0 Then
+                Dim info As New TaskDialogInfo("recuperacion de detalle".ToUpper, eTaskDialogIcon.Help, "¿Desea restaurar el ultimo comprobante?".ToUpper, "".ToUpper, eTaskDialogButton.Yes Or eTaskDialogButton.No, eTaskDialogBackgroundColor.Blue)
+                Dim result As eTaskDialogResult = TaskDialog.Show(info)
+                If result = eTaskDialogResult.Yes Then
+                    _prRecuperar()
+                End If
+            End If
+        Catch ex As Exception
+            MostrarMensajeError(ex.Message)
+        End Try
+
     End Sub
 
     Private Sub btnModificar_Click(sender As Object, e As EventArgs) Handles btnModificar.Click
-        _EsNuevo = False
-        tbTipo.Focus()
-        _ultimaFecha = tbFecha.Value
-        _PMModificar()
+        Try
+            If VerificarCierreMes(tbFecha.Value.Year.ToString(), tbFecha.Value.Month.ToString()) Then
+                Throw New Exception("SE CERRO EL MES DE LA FECHA ESPECÍFICADA")
+            End If
+            _EsNuevo = False
+            tbTipo.Focus()
+            _ultimaFecha = tbFecha.Value
+            _PMModificar()
+        Catch ex As Exception
+            MostrarMensajeError(ex.Message)
+        End Try
+
     End Sub
 
     Private Sub btnEliminar_Click(sender As Object, e As EventArgs) Handles btnEliminar.Click
-        _PMEliminar()
+        Try
+            If VerificarCierreMes(tbFecha.Value.Year.ToString(), tbFecha.Value.Month.ToString()) Then
+                Throw New Exception("SE CERRO EL MES DE LA FECHA ESPECÍFICADA")
+            End If
+            _PMEliminar()
+        Catch ex As Exception
+            MostrarMensajeError(ex.Message)
+        End Try
+
     End Sub
 
     Private Sub btnGrabar_Click(sender As Object, e As EventArgs) Handles btnGrabar.Click
