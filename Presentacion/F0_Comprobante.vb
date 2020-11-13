@@ -2352,10 +2352,15 @@ ControlChars.Lf & "Stack Trace:" & ControlChars.Lf & e.StackTrace
 
     Private Sub btnEliminar_Click(sender As Object, e As EventArgs) Handles btnEliminar.Click
         Try
-            If VerificarCierreMes(tbFecha.Value.Year.ToString(), tbFecha.Value.Month.ToString()) Then
-                Throw New Exception("SE CERRO EL MES DE LA FECHA ESPECÍFICADA")
+            If swIntegracion.Value = True Then
+                Throw New Exception("NO SE PUEDE ELIMINAR UN COMPROBANTE QUE TIENE INTEGRACIÓN, FAVOR ELIMINAR INTEGRACIÓN")
+            Else
+                If VerificarCierreMes(tbFecha.Value.Year.ToString(), tbFecha.Value.Month.ToString()) Then
+                    Throw New Exception("SE CERRO EL MES DE LA FECHA ESPECÍFICADA")
+                End If
+                _PMEliminar()
             End If
-            _PMEliminar()
+
         Catch ex As Exception
             MostrarMensajeError(ex.Message)
         End Try
