@@ -7725,7 +7725,7 @@ Sucursal.canumi =ZY003.ydsuc" + _Cadena
             Else
                 Return False
             End If
-            Return True
+
         Catch ex As Exception
             Throw New Exception(ex.Message)
         End Try
@@ -7747,7 +7747,7 @@ Sucursal.canumi =ZY003.ydsuc" + _Cadena
             Else
                 Return False
             End If
-            Return True
+
         Catch ex As Exception
             Throw New Exception(ex.Message)
         End Try
