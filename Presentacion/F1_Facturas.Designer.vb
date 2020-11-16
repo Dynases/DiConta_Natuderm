@@ -24,6 +24,7 @@ Partial Class F1_Facturas
     Private Sub InitializeComponent()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(F1_Facturas))
         Dim tbTipo_DesignTimeLayout As Janus.Windows.GridEX.GridEXLayout = New Janus.Windows.GridEX.GridEXLayout()
+        Dim cbTipoCompro_DesignTimeLayout As Janus.Windows.GridEX.GridEXLayout = New Janus.Windows.GridEX.GridEXLayout()
         Me.LabelX1 = New DevComponents.DotNetBar.LabelX()
         Me.tbNumi = New DevComponents.DotNetBar.Controls.TextBoxX()
         Me.GroupPanel2 = New DevComponents.DotNetBar.Controls.GroupPanel()
@@ -56,6 +57,10 @@ Partial Class F1_Facturas
         Me.LabelX13 = New DevComponents.DotNetBar.LabelX()
         Me.TbiNroFactura = New DevComponents.Editors.IntegerInput()
         Me.LabelX12 = New DevComponents.DotNetBar.LabelX()
+        Me.tbIdComprobante = New DevComponents.DotNetBar.Controls.TextBoxX()
+        Me.LabelX7 = New DevComponents.DotNetBar.LabelX()
+        Me.cbTipoCompro = New Janus.Windows.GridEX.EditControls.MultiColumnCombo()
+        Me.LabelX17 = New DevComponents.DotNetBar.LabelX()
         CType(Me.SuperTabPrincipal, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuperTabPrincipal.SuspendLayout()
         Me.SuperTabControlPanelRegistro.SuspendLayout()
@@ -84,6 +89,7 @@ Partial Class F1_Facturas
         CType(Me.TbdDescuento, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.tbTipo, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.TbiNroFactura, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.cbTipoCompro, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
         'SuperTabPrincipal
@@ -304,6 +310,10 @@ Partial Class F1_Facturas
         Me.GroupPanel2.BackColor = System.Drawing.Color.Transparent
         Me.GroupPanel2.CanvasColor = System.Drawing.SystemColors.Control
         Me.GroupPanel2.ColorSchemeStyle = DevComponents.DotNetBar.eDotNetBarStyle.Office2007
+        Me.GroupPanel2.Controls.Add(Me.tbIdComprobante)
+        Me.GroupPanel2.Controls.Add(Me.LabelX7)
+        Me.GroupPanel2.Controls.Add(Me.cbTipoCompro)
+        Me.GroupPanel2.Controls.Add(Me.LabelX17)
         Me.GroupPanel2.Controls.Add(Me.tbDui)
         Me.GroupPanel2.Controls.Add(Me.GroupPanel5)
         Me.GroupPanel2.Controls.Add(Me.LabelX5)
@@ -832,6 +842,61 @@ Partial Class F1_Facturas
         Me.LabelX12.TabIndex = 128
         Me.LabelX12.Text = "Nro. Autorización:"
         '
+        'tbIdComprobante
+        '
+        '
+        '
+        '
+        Me.tbIdComprobante.Border.Class = "TextBoxBorder"
+        Me.tbIdComprobante.Border.CornerType = DevComponents.DotNetBar.eCornerType.Square
+        Me.tbIdComprobante.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.tbIdComprobante.Location = New System.Drawing.Point(696, 29)
+        Me.tbIdComprobante.Name = "tbIdComprobante"
+        Me.tbIdComprobante.PreventEnterBeep = True
+        Me.tbIdComprobante.Size = New System.Drawing.Size(100, 20)
+        Me.tbIdComprobante.TabIndex = 133
+        Me.tbIdComprobante.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
+        '
+        'LabelX7
+        '
+        Me.LabelX7.BackColor = System.Drawing.Color.Transparent
+        '
+        '
+        '
+        Me.LabelX7.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square
+        Me.LabelX7.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.LabelX7.Location = New System.Drawing.Point(660, 5)
+        Me.LabelX7.Name = "LabelX7"
+        Me.LabelX7.Size = New System.Drawing.Size(106, 23)
+        Me.LabelX7.TabIndex = 134
+        Me.LabelX7.Text = "ID COMPROBANTE:"
+        '
+        'cbTipoCompro
+        '
+        cbTipoCompro_DesignTimeLayout.LayoutString = resources.GetString("cbTipoCompro_DesignTimeLayout.LayoutString")
+        Me.cbTipoCompro.DesignTimeLayout = cbTipoCompro_DesignTimeLayout
+        Me.cbTipoCompro.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.cbTipoCompro.Location = New System.Drawing.Point(696, 72)
+        Me.cbTipoCompro.Name = "cbTipoCompro"
+        Me.cbTipoCompro.SelectedIndex = -1
+        Me.cbTipoCompro.SelectedItem = Nothing
+        Me.cbTipoCompro.Size = New System.Drawing.Size(100, 20)
+        Me.cbTipoCompro.TabIndex = 132
+        '
+        'LabelX17
+        '
+        Me.LabelX17.BackColor = System.Drawing.Color.Transparent
+        '
+        '
+        '
+        Me.LabelX17.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square
+        Me.LabelX17.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.LabelX17.Location = New System.Drawing.Point(659, 51)
+        Me.LabelX17.Name = "LabelX17"
+        Me.LabelX17.Size = New System.Drawing.Size(65, 23)
+        Me.LabelX17.TabIndex = 135
+        Me.LabelX17.Text = "TIPO:"
+        '
         'F1_Facturas
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -872,6 +937,7 @@ Partial Class F1_Facturas
         CType(Me.TbdDescuento, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.tbTipo, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.TbiNroFactura, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.cbTipoCompro, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
 
     End Sub
@@ -907,4 +973,8 @@ Partial Class F1_Facturas
     Friend WithEvents LabelX13 As DevComponents.DotNetBar.LabelX
     Friend WithEvents TbiNroFactura As DevComponents.Editors.IntegerInput
     Friend WithEvents LabelX12 As DevComponents.DotNetBar.LabelX
+    Friend WithEvents tbIdComprobante As DevComponents.DotNetBar.Controls.TextBoxX
+    Friend WithEvents LabelX7 As DevComponents.DotNetBar.LabelX
+    Friend WithEvents cbTipoCompro As Janus.Windows.GridEX.EditControls.MultiColumnCombo
+    Friend WithEvents LabelX17 As DevComponents.DotNetBar.LabelX
 End Class

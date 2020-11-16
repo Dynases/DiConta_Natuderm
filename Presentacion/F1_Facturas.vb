@@ -46,6 +46,7 @@ Public Class F1_Facturas
         Me.Text = "F A C T U R A S"
         _prCargarComboLibreria(tbTipo, gi_LibFactura, gi_LibFACTURATipo)
 
+        _prCargarComboLibreria(cbTipoCompro, gi_LibComprobante, gi_LibCOMPROBANTETipo)
 
         _PMIniciarTodo()
 
@@ -156,7 +157,8 @@ Public Class F1_Facturas
         TbSubTotal.IsInputReadOnly = True
         tbTipo.ReadOnly = True
 
-
+        cbTipoCompro.ReadOnly = True
+        tbIdComprobante.ReadOnly = True
         TbdMontoFactura.IsInputReadOnly = True
         TbdDescuento.IsInputReadOnly = True
 
@@ -399,14 +401,14 @@ Public Class F1_Facturas
         Dim listEstCeldas As New List(Of Modelos.Celda)
         listEstCeldas.Add(New Modelos.Celda("fcanumi", True, "ID", 70))
         listEstCeldas.Add(New Modelos.Celda("fcafdoc", True, "FECHA", 100))
-        listEstCeldas.Add(New Modelos.Celda("fcanit", True, "NIT", 200))
+        listEstCeldas.Add(New Modelos.Celda("fcanit", True, "NIT", 150))
         listEstCeldas.Add(New Modelos.Celda("fcarsocial", True, "RAZON SOCIAL", 200))
-        listEstCeldas.Add(New Modelos.Celda("fcanfac", True, "NRO. FACTURA", 200))
+        listEstCeldas.Add(New Modelos.Celda("fcanfac", True, "NRO. FACTURA", 100))
         listEstCeldas.Add(New Modelos.Celda("fcandui", True, "DUI", 100))
-        listEstCeldas.Add(New Modelos.Celda("fcaautoriz", True, "NRO. AUTORIZACION", 100))
-        listEstCeldas.Add(New Modelos.Celda("fcaitc", True, "IMPORTE TOTAL COMPRA", 100, "0.00"))
+        listEstCeldas.Add(New Modelos.Celda("fcaautoriz", True, "NRO. AUTORIZACION", 90))
+        listEstCeldas.Add(New Modelos.Celda("fcaitc", True, "IMPORTE TOTAL COMPRA", 90, "0.00"))
         listEstCeldas.Add(New Modelos.Celda("fcanscf", False))
-        listEstCeldas.Add(New Modelos.Celda("fcasubtotal", True, "SUBTOTAL", 100, "0.00"))
+        listEstCeldas.Add(New Modelos.Celda("fcasubtotal", True, "SUBTOTAL", 90, "0.00"))
         listEstCeldas.Add(New Modelos.Celda("fcadesc", False, "OBSERVACION", 70))
         listEstCeldas.Add(New Modelos.Celda("fcaibcf", False, "FEC. NACIMIENTO", 80))
         listEstCeldas.Add(New Modelos.Celda("fcacfiscal", False, "FEC. INGRESO", 80))
@@ -414,13 +416,14 @@ Public Class F1_Facturas
         listEstCeldas.Add(New Modelos.Celda("fcatcom", False, "FEC. RETIRO", 80))
         listEstCeldas.Add(New Modelos.Celda("fcanumito11", False, "FEC. RETIRO", 80))
         listEstCeldas.Add(New Modelos.Celda("estado", False, "FEC. RETIRO", 80))
-
+        listEstCeldas.Add(New Modelos.Celda("comprobanteId", True, "IdComprobante", 80))
+        listEstCeldas.Add(New Modelos.Celda("tipo", False, "Tipo", 80))
+        listEstCeldas.Add(New Modelos.Celda("tipoDesc", True, "Tipo", 80))
         Return listEstCeldas
     End Function
 
     Public Overrides Sub _PMOMostrarRegistro(_N As Integer)
         JGrM_Buscador.Row = _MPos
-
         With JGrM_Buscador
             tbNumi.Text = .GetValue("fcanumi").ToString
             DtiFechaFactura.Value = .GetValue("fcafdoc")
@@ -435,16 +438,12 @@ Public Class F1_Facturas
             TbdDescuento.Value = .GetValue("fcadesc")
             tbImporteBaseCreditoFiscal.Value = .GetValue("fcaibcf")
             tbCreditoFiscal.Value = .GetValue("fcacfiscal")
-
+            cbTipoCompro.Value = .GetValue("tipo")
             TbCodigoControl.Text = .GetValue("fcaccont")
-
+            tbIdComprobante.Text = .GetValue("comprobanteId")
             tbTipo.Value = IIf(IsDBNull(.GetValue("fcatcom")), -1, .GetValue("fcatcom"))
-
-
         End With
-
         LblPaginacion.Text = Str(_MPos + 1) + "/" + JGrM_Buscador.RowCount.ToString
-
     End Sub
     Public Sub _PMOMostrarRegistroDesdeComprobante(_N As Integer)
 
