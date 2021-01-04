@@ -479,14 +479,19 @@ Public Class PR_LibroMayor
         If IsNothing(grDetalle.DataSource) = False Then
             Dim objrep As New R_LibroMayor
             Dim dt As DataTable = CType(grDetalle.DataSource, DataTable)
-            If tbMeses.Value = True Then
-                Dim filasFiltradas As DataRow() = dt.Select("oanumi<>-1")
-                If filasFiltradas.Count > 0 Then
-                    dt = filasFiltradas.CopyToDataTable
-                End If
+            'If tbMeses.Value = True Then
+            '    Dim filasFiltradas As DataRow() = dt.Select("oanumi<>-1")
+            '    If filasFiltradas.Count > 0 Then
+            '        dt = filasFiltradas.CopyToDataTable
+            '    End If
+            'End If
+            ''saco el ultimo registro del total
+            'dt.Rows(dt.Rows.Count - 1).Delete()
+
+            Dim filasFiltradas As DataRow() = dt.Select("oanumi<>-1")
+            If filasFiltradas.Count > 0 Then
+                dt = filasFiltradas.CopyToDataTable
             End If
-            'saco el ultimo registro del total
-            dt.Rows(dt.Rows.Count - 1).Delete()
 
             'ahora lo mando al visualizador
             P_Global.Visualizador = New Visualizador

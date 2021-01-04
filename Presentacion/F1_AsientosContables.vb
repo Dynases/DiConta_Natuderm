@@ -119,6 +119,13 @@ Public Class F1_AsientosContables
             .AllowSort = False
 
         End With
+        With grmovimientos.RootTable.Columns("ifto001numibanco")
+            .Width = 100
+            .Visible = True
+            .Caption = "MÓDULO".ToUpper
+
+        End With
+
         With grmovimientos
             .DefaultFilterRowComparison = FilterConditionOperator.Equal
             .FilterMode = FilterMode.Automatic

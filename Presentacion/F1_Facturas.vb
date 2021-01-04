@@ -416,9 +416,9 @@ Public Class F1_Facturas
         listEstCeldas.Add(New Modelos.Celda("fcatcom", False, "FEC. RETIRO", 80))
         listEstCeldas.Add(New Modelos.Celda("fcanumito11", False, "FEC. RETIRO", 80))
         listEstCeldas.Add(New Modelos.Celda("estado", False, "FEC. RETIRO", 80))
-        listEstCeldas.Add(New Modelos.Celda("comprobanteId", True, "IdComprobante", 80))
-        listEstCeldas.Add(New Modelos.Celda("tipo", False, "Tipo", 80))
-        listEstCeldas.Add(New Modelos.Celda("tipoDesc", True, "Tipo", 80))
+        listEstCeldas.Add(New Modelos.Celda("comprobanteId", True, "IDCOMPROBANTE", 95))
+        listEstCeldas.Add(New Modelos.Celda("tipo", False, "TIPO", 80))
+        listEstCeldas.Add(New Modelos.Celda("tipoDesc", True, "TIPO", 95))
         Return listEstCeldas
     End Function
 
@@ -542,9 +542,7 @@ Public Class F1_Facturas
         tbCreditoFiscal.Value = tbImporteBaseCreditoFiscal.Value * 0.13
     End Sub
 
-    Private Sub btnEliminar_Click(sender As Object, e As EventArgs) Handles btnEliminar.Click
 
-    End Sub
 #End Region
 
 End Class
