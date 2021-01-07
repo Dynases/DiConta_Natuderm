@@ -1097,26 +1097,26 @@ Partial Class F0_Comprobante
         Me.cmOpcionesDetalle.ImageScalingSize = New System.Drawing.Size(24, 24)
         Me.cmOpcionesDetalle.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ELIMINARToolStripMenuItem, Me.INSERTARFILAToolStripMenuItem, Me.MODIFICARFACTURAToolStripMenuItem})
         Me.cmOpcionesDetalle.Name = "ContextMenuStrip1"
-        Me.cmOpcionesDetalle.Size = New System.Drawing.Size(205, 112)
+        Me.cmOpcionesDetalle.Size = New System.Drawing.Size(204, 112)
         '
         'ELIMINARToolStripMenuItem
         '
         Me.ELIMINARToolStripMenuItem.Image = Global.Presentacion.My.Resources.Resources.elim_fila2
         Me.ELIMINARToolStripMenuItem.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None
         Me.ELIMINARToolStripMenuItem.Name = "ELIMINARToolStripMenuItem"
-        Me.ELIMINARToolStripMenuItem.Size = New System.Drawing.Size(204, 36)
+        Me.ELIMINARToolStripMenuItem.Size = New System.Drawing.Size(203, 36)
         Me.ELIMINARToolStripMenuItem.Text = "ELIMINAR"
         '
         'INSERTARFILAToolStripMenuItem
         '
         Me.INSERTARFILAToolStripMenuItem.Name = "INSERTARFILAToolStripMenuItem"
-        Me.INSERTARFILAToolStripMenuItem.Size = New System.Drawing.Size(204, 36)
+        Me.INSERTARFILAToolStripMenuItem.Size = New System.Drawing.Size(203, 36)
         Me.INSERTARFILAToolStripMenuItem.Text = "INSERTAR FILA"
         '
         'MODIFICARFACTURAToolStripMenuItem
         '
         Me.MODIFICARFACTURAToolStripMenuItem.Name = "MODIFICARFACTURAToolStripMenuItem"
-        Me.MODIFICARFACTURAToolStripMenuItem.Size = New System.Drawing.Size(204, 36)
+        Me.MODIFICARFACTURAToolStripMenuItem.Size = New System.Drawing.Size(203, 36)
         Me.MODIFICARFACTURAToolStripMenuItem.Text = "MODIFICAR FACTURA"
         '
         'ButtonX2
@@ -1192,13 +1192,13 @@ Partial Class F0_Comprobante
         Me.cmOpcionesAyuda.ImageScalingSize = New System.Drawing.Size(24, 24)
         Me.cmOpcionesAyuda.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripMenuItem1})
         Me.cmOpcionesAyuda.Name = "ContextMenuStrip1"
-        Me.cmOpcionesAyuda.Size = New System.Drawing.Size(186, 26)
+        Me.cmOpcionesAyuda.Size = New System.Drawing.Size(185, 26)
         '
         'ToolStripMenuItem1
         '
         Me.ToolStripMenuItem1.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None
         Me.ToolStripMenuItem1.Name = "ToolStripMenuItem1"
-        Me.ToolStripMenuItem1.Size = New System.Drawing.Size(185, 22)
+        Me.ToolStripMenuItem1.Size = New System.Drawing.Size(184, 22)
         Me.ToolStripMenuItem1.Text = "MODIFICAR CLIENTE"
         '
         'btRecuperar

@@ -1831,7 +1831,19 @@ Sucursal.canumi =ZY003.ydsuc" + _Cadena
 
         Return _resultado
     End Function
+    Public Shared Function L_VerificarCuenta(_idcuenta As Integer) As DataTable
+        Dim _Tabla As DataTable
 
+        Dim _listParam As New List(Of Datos.DParametro)
+
+        _listParam.Add(New Datos.DParametro("@tipo", 12))
+        _listParam.Add(New Datos.DParametro("@idcuenta", _idcuenta))
+        _listParam.Add(New Datos.DParametro("@uact", L_Usuario))
+
+        _Tabla = D_ProcedimientoConParam("sp_dg_TO001", _listParam)
+
+        Return _Tabla
+    End Function
 #End Region
 
 #Region "EMPRESA"

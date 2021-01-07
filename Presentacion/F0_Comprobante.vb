@@ -2200,6 +2200,18 @@ ControlChars.Lf & "Stack Trace:" & ControlChars.Lf & e.StackTrace
                 End If
             End If
 
+            Dim dt1 As DataTable = CType(grDetalle.DataSource, DataTable)
+
+
+            For i = 0 To dt1.Rows.Count - 1
+                Dim dt2 As DataTable = L_VerificarCuenta(dt1.Rows(i).Item("obcuenta"))
+                If dt1.Rows(i).Item("numiCobrar") = 0 And dt2.Rows.Count > 0 Then
+                    _ok = False
+                    ToastNotification.Show(Me, "No se agregó cliente por cobrar o pagar en alguna de las cuentas introducidas, verifique".ToUpper, My.Resources.WARNING, 5500, eToastGlowColor.Green, eToastPosition.TopCenter)
+
+                End If
+            Next
+
             MHighlighterFocus.UpdateHighlights()
             Return _ok
         Catch ex As Exception
@@ -2957,10 +2969,16 @@ ControlChars.Lf & "Stack Trace:" & ControlChars.Lf & e.StackTrace
             _prCargarGridAyudaCuenta()
         End If
 
+        ''grDetalle.SetValue("cacta", cod)
+        'ggg
+        'If grDetalle.RootTable.Columns(e.Column.Index).Key = "obobs" Then
 
+        '    e.Cancel = False
+        'End If
     End Sub
 
     Private Sub grAyudaCuenta_KeyDown(sender As Object, e As KeyEventArgs) Handles grAyudaCuenta.KeyDown
+
 
         If e.KeyData = Keys.Control + Keys.A And btnGrabar.Enabled = True And grAyudaCuenta.Tag = -1 And grAyudaCuenta.Row = -2 Then
             'desea agregar a un nuevo cliente
@@ -3049,11 +3067,17 @@ ControlChars.Lf & "Stack Trace:" & ControlChars.Lf & e.StackTrace
                     'verifico si tiene cuenta por cobrar para mandarlo a clientes
                     If grAyudaCuenta.GetValue("isCobrar") = 1 Then
                         _prCargarGridAyudaClienteCobrar(numiCuenta)
+                        ToastNotification.Show(Me, "Debe seleccionar o agregar con 'Ctrl+A' un cliente".ToUpper, My.Resources.WARNING, 4000, eToastGlowColor.Blue, eToastPosition.TopCenter)
+
                         grAyudaCuenta.Tag = -1
+
                     Else
                         If grAyudaCuenta.GetValue("isPagar") = 1 Then
                             _prCargarGridAyudaClientePagar(numiCuenta)
+                            ToastNotification.Show(Me, "Debe seleccionar o agregar con 'Ctrl+A' un cliente".ToUpper, My.Resources.WARNING, 4000, eToastGlowColor.Blue, eToastPosition.TopCenter)
+
                             grAyudaCuenta.Tag = -2
+
                         Else
                             If grAyudaCuenta.GetValue("isCompra") = 1 Then
                                 'If VerificarExistenciaFacturaEnDetalle() Then
@@ -3211,7 +3235,13 @@ ControlChars.Lf & "Stack Trace:" & ControlChars.Lf & e.StackTrace
             End If
         End If
         If e.KeyData = Keys.Escape Then
-            _DesHabilitarAyuda()
+            If grAyudaCuenta.Tag = -1 Or grAyudaCuenta.Tag = -2 Then
+                ToastNotification.Show(Me, "Debe seleccionar o agregar con 'Ctrl+A' un cliente".ToUpper, My.Resources.WARNING, 4000, eToastGlowColor.Blue, eToastPosition.TopCenter)
+
+            Else
+                _DesHabilitarAyuda()
+            End If
+
         End If
     End Sub
     Private Sub _DesHabilitarAyuda()
