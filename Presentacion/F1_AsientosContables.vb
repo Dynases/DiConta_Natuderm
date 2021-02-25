@@ -1704,7 +1704,7 @@ Public Class F1_AsientosContables
             TipoTransacion = 3   ''''se asigna 3= traspaso
 
         Else
-            If (cbSucursal.Value = 3) Then  '''' si es ventas al contado o credito
+            If (cbSucursal.Value = 3 Or cbSucursal.Value = 1006 Or cbSucursal.Value = 1007) Then  '''' si es ventas al contado o credito
                 TipoTransacion = 1 ''' se asigna 1=ingreso
 
             Else ''' si no es ninguna de las demas y entonces es pagos de credito es un egreso
