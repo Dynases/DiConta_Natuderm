@@ -367,7 +367,9 @@ Public Class F0_CierreGestion
             Inhabilitar()
             inHabilitarMenu()
         Else
-            Me.Close()
+            _modulo.Select()
+            _tab.Close()
+            'Me.Close()
         End If
     End Sub
 

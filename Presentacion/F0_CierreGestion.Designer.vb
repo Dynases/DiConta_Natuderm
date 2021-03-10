@@ -78,7 +78,7 @@ Partial Class F0_CierreGestion
         Me.SuperTabPrincipal.ControlBox.MenuBox.Name = ""
         Me.SuperTabPrincipal.ControlBox.Name = ""
         Me.SuperTabPrincipal.ControlBox.SubItems.AddRange(New DevComponents.DotNetBar.BaseItem() {Me.SuperTabPrincipal.ControlBox.MenuBox, Me.SuperTabPrincipal.ControlBox.CloseBox})
-        Me.SuperTabPrincipal.Size = New System.Drawing.Size(652, 502)
+        Me.SuperTabPrincipal.Size = New System.Drawing.Size(797, 502)
         Me.SuperTabPrincipal.Controls.SetChildIndex(Me.SuperTabControlPanelBuscador, 0)
         Me.SuperTabPrincipal.Controls.SetChildIndex(Me.SuperTabControlPanelRegistro, 0)
         '
@@ -90,14 +90,14 @@ Partial Class F0_CierreGestion
         '
         'SuperTabControlPanelRegistro
         '
-        Me.SuperTabControlPanelRegistro.Size = New System.Drawing.Size(620, 502)
+        Me.SuperTabControlPanelRegistro.Size = New System.Drawing.Size(765, 502)
         Me.SuperTabControlPanelRegistro.Controls.SetChildIndex(Me.PanelSuperior, 0)
         Me.SuperTabControlPanelRegistro.Controls.SetChildIndex(Me.PanelInferior, 0)
         Me.SuperTabControlPanelRegistro.Controls.SetChildIndex(Me.PanelPrincipal, 0)
         '
         'PanelSuperior
         '
-        Me.PanelSuperior.Size = New System.Drawing.Size(620, 72)
+        Me.PanelSuperior.Size = New System.Drawing.Size(765, 72)
         Me.PanelSuperior.Style.Alignment = System.Drawing.StringAlignment.Center
         Me.PanelSuperior.Style.BackColor1.Color = System.Drawing.Color.FromArgb(CType(CType(0, Byte), Integer), CType(CType(45, Byte), Integer), CType(CType(150, Byte), Integer))
         Me.PanelSuperior.Style.BackColor2.Color = System.Drawing.Color.FromArgb(CType(CType(0, Byte), Integer), CType(CType(45, Byte), Integer), CType(CType(150, Byte), Integer))
@@ -115,7 +115,7 @@ Partial Class F0_CierreGestion
         'PanelInferior
         '
         Me.PanelInferior.Location = New System.Drawing.Point(0, 463)
-        Me.PanelInferior.Size = New System.Drawing.Size(620, 39)
+        Me.PanelInferior.Size = New System.Drawing.Size(765, 39)
         Me.PanelInferior.Style.Alignment = System.Drawing.StringAlignment.Center
         Me.PanelInferior.Style.BackColor1.Color = System.Drawing.Color.Transparent
         Me.PanelInferior.Style.BackColor2.Color = System.Drawing.Color.Transparent
@@ -162,12 +162,12 @@ Partial Class F0_CierreGestion
         '
         'PanelToolBar2
         '
-        Me.PanelToolBar2.Location = New System.Drawing.Point(540, 0)
+        Me.PanelToolBar2.Location = New System.Drawing.Point(685, 0)
         '
         'PanelPrincipal
         '
         Me.PanelPrincipal.Controls.Add(Me.PanelFondo)
-        Me.PanelPrincipal.Size = New System.Drawing.Size(620, 391)
+        Me.PanelPrincipal.Size = New System.Drawing.Size(765, 391)
         Me.PanelPrincipal.Controls.SetChildIndex(Me.PanelUsuario, 0)
         Me.PanelPrincipal.Controls.SetChildIndex(Me.PanelFondo, 0)
         '
@@ -185,7 +185,7 @@ Partial Class F0_CierreGestion
         '
         'MPanelUserAct
         '
-        Me.MPanelUserAct.Location = New System.Drawing.Point(420, 0)
+        Me.MPanelUserAct.Location = New System.Drawing.Point(565, 0)
         '
         'MRlAccion
         '
@@ -193,7 +193,7 @@ Partial Class F0_CierreGestion
         '
         '
         Me.MRlAccion.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square
-        Me.MRlAccion.Size = New System.Drawing.Size(164, 72)
+        Me.MRlAccion.Size = New System.Drawing.Size(309, 72)
         '
         'PanelFondo
         '
@@ -203,7 +203,7 @@ Partial Class F0_CierreGestion
         Me.PanelFondo.Dock = System.Windows.Forms.DockStyle.Fill
         Me.PanelFondo.Location = New System.Drawing.Point(0, 0)
         Me.PanelFondo.Name = "PanelFondo"
-        Me.PanelFondo.Size = New System.Drawing.Size(620, 391)
+        Me.PanelFondo.Size = New System.Drawing.Size(765, 391)
         Me.PanelFondo.TabIndex = 20
         '
         'GroupPanel1
@@ -217,7 +217,7 @@ Partial Class F0_CierreGestion
         Me.GroupPanel1.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.GroupPanel1.Location = New System.Drawing.Point(0, 140)
         Me.GroupPanel1.Name = "GroupPanel1"
-        Me.GroupPanel1.Size = New System.Drawing.Size(620, 251)
+        Me.GroupPanel1.Size = New System.Drawing.Size(765, 251)
         '
         '
         '
@@ -255,7 +255,7 @@ Partial Class F0_CierreGestion
         Me.grDetalle.Font = New System.Drawing.Font("Microsoft Sans Serif", 7.8!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.grDetalle.Location = New System.Drawing.Point(0, 0)
         Me.grDetalle.Name = "grDetalle"
-        Me.grDetalle.Size = New System.Drawing.Size(614, 228)
+        Me.grDetalle.Size = New System.Drawing.Size(759, 228)
         Me.grDetalle.TabIndex = 0
         '
         'GroupPanel2
@@ -276,7 +276,7 @@ Partial Class F0_CierreGestion
         Me.GroupPanel2.Dock = System.Windows.Forms.DockStyle.Top
         Me.GroupPanel2.Location = New System.Drawing.Point(0, 37)
         Me.GroupPanel2.Name = "GroupPanel2"
-        Me.GroupPanel2.Size = New System.Drawing.Size(620, 103)
+        Me.GroupPanel2.Size = New System.Drawing.Size(765, 103)
         '
         '
         '
@@ -442,7 +442,7 @@ Partial Class F0_CierreGestion
         Me.LblSubtitulo.ForeColor = System.Drawing.Color.Black
         Me.LblSubtitulo.Location = New System.Drawing.Point(0, 0)
         Me.LblSubtitulo.Name = "LblSubtitulo"
-        Me.LblSubtitulo.Size = New System.Drawing.Size(620, 37)
+        Me.LblSubtitulo.Size = New System.Drawing.Size(765, 37)
         Me.LblSubtitulo.TabIndex = 70
         Me.LblSubtitulo.Text = "Registre un nuevo Cierre de Mes. Visualice y/o modifique la información de un cie" &
     "rre de mes previamente registrado. " & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & " "
@@ -504,7 +504,7 @@ Partial Class F0_CierreGestion
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(652, 502)
+        Me.ClientSize = New System.Drawing.Size(797, 502)
         Me.Name = "F0_CierreGestion"
         Me.Text = "F0_CierreGestion"
         Me.Controls.SetChildIndex(Me.SuperTabPrincipal, 0)
