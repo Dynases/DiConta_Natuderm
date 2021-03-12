@@ -7766,4 +7766,12 @@ Sucursal.canumi =ZY003.ydsuc" + _Cadena
     End Function
 #End Region
 
+#Region "Parámetros"
+    Public Shared Function L_Parametros(Optional _Cadena As String = "") As DataTable
+        Dim _Tabla As DataTable
+
+        _Tabla = D_Datos_Tabla(" * ", "Parametros", "1=1")
+        Return _Tabla
+    End Function
+#End Region
 End Class

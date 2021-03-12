@@ -56,7 +56,7 @@ Public Class PR_DepresiacionResumen
 
             Dim objrep As New R_DepresiacionResumen
             objrep.SetDataSource(dt)
-            objrep.SetParameterValue("titulo", "FARMACIA GENERAL MAGISTRAL NATUDERM " + gs_empresaDesc.ToUpper)
+            objrep.SetParameterValue("titulo", gs_empresaDescSistema + " " + gs_empresaDesc.ToUpper)
             objrep.SetParameterValue("titulo2", titulo)
             objrep.SetParameterValue("nit", gs_empresaNit.ToUpper)
 

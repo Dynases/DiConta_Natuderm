@@ -769,7 +769,8 @@ ControlChars.Lf & "Stack Trace:" & ControlChars.Lf & e.StackTrace
         objrep.SetDataSource(dt)
         objrep.SetParameterValue("fechaDesde", "")
         objrep.SetParameterValue("fechaHasta", "")
-        objrep.SetParameterValue("titulo", "FARMACIA GENERAL MAGISTRAL NATUDERM " + gs_empresaDescSistema.ToUpper)
+        objrep.SetParameterValue("titulo", gs_empresaDescSistema + " " + gs_empresaDescSistema.ToUpper)
+        objrep.SetParameterValue("direccion", gs_empresaDireccion)
         objrep.SetParameterValue("nit", gs_empresaNit.ToUpper)
         objrep.SetParameterValue("ultimoRegistro", 0)
 

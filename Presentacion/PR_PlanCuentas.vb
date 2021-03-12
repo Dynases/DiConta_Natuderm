@@ -52,7 +52,7 @@ Public Class PR_PlanCuentas
             objrep.SetDataSource(dt)
             MReportViewer.ReportSource = objrep
 
-            objrep.SetParameterValue("titulo", "FARMACIA GENERAL MAGISTRAL NATUDERM " + gs_empresaDesc.ToUpper)
+            objrep.SetParameterValue("titulo", gs_empresaDescSistema + " " + gs_empresaDesc.ToUpper)
 
             MReportViewer.Show()
             MReportViewer.BringToFront()

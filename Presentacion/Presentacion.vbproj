@@ -686,11 +686,17 @@
       <DependentUpon>R_CierreGeneral.rpt</DependentUpon>
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="Reportes\R_Comprobante2.vb">
-      <DependentUpon>R_Comprobante2.rpt</DependentUpon>
+    <Compile Include="Reportes\R_Comprobante1.vb">
+      <DependentUpon>R_Comprobante1.rpt</DependentUpon>
       <AutoGen>True</AutoGen>
       <SubType>Component</SubType>
       <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Reportes\R_Comprobante2.vb">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>R_Comprobante2.rpt</DependentUpon>
+      <SubType>Component</SubType>
     </Compile>
     <Compile Include="Reportes\R_ComprobanteIntegracion.vb">
       <DependentUpon>R_ComprobanteIntegracion.rpt</DependentUpon>
@@ -1155,6 +1161,10 @@
     <EmbeddedResource Include="Reportes\R_CierreGeneral.rpt">
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
       <LastGenOutput>R_CierreGeneral.vb</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reportes\R_Comprobante1.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>R_Comprobante1.vb</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="Reportes\R_Comprobante2.rpt">
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>

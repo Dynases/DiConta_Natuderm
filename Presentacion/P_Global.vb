@@ -152,6 +152,9 @@ Module P_Global
     Public gs_empresaDescSistema As String
     Public gs_empresaDesc As String
     Public gi_empresaNumi As String
+
+    Public gs_tipoComprobante As String
+
 #End Region
 
 #Region "Imagenes Reportes Categorias"

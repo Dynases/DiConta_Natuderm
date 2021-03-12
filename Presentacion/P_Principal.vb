@@ -122,6 +122,8 @@ Public Class P_Principal
 
             _PCargarPrivilegios()
             _prCargarConfiguracionSistema()
+            _prCargarParametros()
+
             SideNav1.Enabled = True
 
             Me.Text = "DICONTA -->" + gs_empresaDescSistema
@@ -145,7 +147,10 @@ Public Class P_Principal
     Private Sub _prCargarConfiguracionSistema()
         Dim dtConf As DataTable = L_prConGlobalGeneral()
         gd_tipoCambioCarburantes = dtConf.Rows(0).Item("gbtcambio")
-
+    End Sub
+    Private Sub _prCargarParametros()
+        Dim gs_Parametros As DataTable = L_Parametros()
+        gs_tipoComprobante = gs_Parametros.Rows(0).Item("sytipocomprobante")
     End Sub
 
     Private Sub _PCargarPrivilegios()

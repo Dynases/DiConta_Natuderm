@@ -62,7 +62,7 @@ Public Class PR_Ventas
 
             objrep.SetParameterValue("fechaDesde", tbFechaDel.Value.ToString("dd/MM/yyyy"))
             objrep.SetParameterValue("fechaHasta", tbFechaAl.Value.ToString("dd/MM/yyyy"))
-            objrep.SetParameterValue("titulo", "FARMACIA GENERAL MAGISTRAL NATUDERM " + gs_empresaDesc.ToUpper)
+            objrep.SetParameterValue("titulo", gs_empresaDescSistema + " " + gs_empresaDesc.ToUpper)
             'objrep.SetParameterValue("nit", gs_empresaNit.ToUpper)
 
             MReportViewer.Show()

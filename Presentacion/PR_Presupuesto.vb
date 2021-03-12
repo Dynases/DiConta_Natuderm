@@ -253,7 +253,7 @@ Public Class PR_Presupuesto
 
             Dim objrep As New R_PresupuestoResumen
             objrep.SetDataSource(dt)
-            objrep.SetParameterValue("titulo", "FARMACIA GENERAL MAGISTRAL NATUDERM" + gs_empresaDesc.ToUpper)
+            objrep.SetParameterValue("titulo", gs_empresaDescSistema + " " + gs_empresaDesc.ToUpper)
 
             MReportViewer.ReportSource = objrep
 

@@ -23,7 +23,7 @@ Public Class PR_LibroDiario
 
             objrep.SetParameterValue("fechaDesde", tbFechaDel.Value.ToString("dd/MM/yyyy"))
             objrep.SetParameterValue("fechaHasta", tbFechaAl.Value.ToString("dd/MM/yyyy"))
-            objrep.SetParameterValue("titulo", "FARMACIA GENERAL MAGISTRAL NATUDERM" + gs_empresaDesc.ToUpper)
+            objrep.SetParameterValue("titulo", gs_empresaDescSistema + " " + gs_empresaDesc.ToUpper)
             'objrep.SetParameterValue("nit", gs_empresaNit.ToUpper)
             'objrep.SetParameterValue("ultimoRegistro", dt.Rows(dt.Rows.Count - 1).Item("oanumi"))
 
