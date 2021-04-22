@@ -91,7 +91,7 @@ Public Class MetodoDatos
 
             Dim _adaptador As New SqlDataAdapter 'SqlDataAdapter()
             _adaptador.SelectCommand = Comando
-
+            Comando.CommandTimeout = 0
             _adaptador.Fill(_tabla)
 
             'Dim n As Integer = Comando.Connection.ConnectionTimeout()

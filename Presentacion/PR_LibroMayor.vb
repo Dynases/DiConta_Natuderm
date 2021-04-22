@@ -477,7 +477,7 @@ Public Class PR_LibroMayor
     End Sub
     Private Sub _prImprimir()
         If IsNothing(grDetalle.DataSource) = False Then
-            Dim objrep As New R_LibroMayor
+            Dim objrep As New R_LibroMayor2
             Dim dt As DataTable = CType(grDetalle.DataSource, DataTable)
             'If tbMeses.Value = True Then
             '    Dim filasFiltradas As DataRow() = dt.Select("oanumi<>-1")
