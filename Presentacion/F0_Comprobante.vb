@@ -2292,7 +2292,7 @@ ControlChars.Lf & "Stack Trace:" & ControlChars.Lf & e.StackTrace
 
             For i = 0 To dt1.Rows.Count - 1
                 Dim dt2 As DataTable = L_VerificarCuenta(dt1.Rows(i).Item("obcuenta"))
-                If dt1.Rows(i).Item("numiCobrar") = 0 And dt2.Rows.Count > 0 Then
+                If dt1.Rows(i).Item("numiCobrar") = 0 And dt2.Rows.Count > 0 And dt1.Rows(i).Item("estado") = 0 Then
                     _ok = False
                     ToastNotification.Show(Me, "No se agregó cliente por cobrar o pagar en alguna de las cuentas introducidas, verifique".ToUpper, My.Resources.WARNING, 5500, eToastGlowColor.Green, eToastPosition.TopCenter)
 
