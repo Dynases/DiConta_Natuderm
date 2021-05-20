@@ -1082,9 +1082,10 @@ Public Class F1_AsientosContables
                     If (tipo = -1) Then
 
                         ''''''''''''''''''
-                        Dim IdTC009 As Integer = _fnBuscarIDTC009(dtPagos.Rows(j).Item("ydnumi"), _dtTC009Inserted)
+                        Dim IdTC009 As Integer = _fnBuscarIDTC009(dtPagos.Rows(k).Item("ydnumi"), _dtTC009Inserted)
                         dtTO00111.Rows.Add(0, Linea, IdTC009, 1)
                         '''''''''''''''''''''''''
+
                     End If
 
 
