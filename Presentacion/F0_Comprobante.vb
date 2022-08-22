@@ -2287,8 +2287,14 @@ ControlChars.Lf & "Stack Trace:" & ControlChars.Lf & e.StackTrace
                 End If
             End If
 
-            Dim dt1 As DataTable = CType(grDetalle.DataSource, DataTable)
+            For i = 0 To CType(grDetalle.DataSource, DataTable).Rows.Count - 1
+                If CType(grDetalle.DataSource, DataTable).Rows(i).Item("estado").ToString = String.Empty Then
+                    CType(grDetalle.DataSource, DataTable).Rows(i).Item("estado") = 0
+                    CType(grDetalle.DataSource, DataTable).Rows(i).Item("numiCompra") = 0
+                End If
+            Next
 
+            Dim dt1 As DataTable = CType(grDetalle.DataSource, DataTable)
 
             For i = 0 To dt1.Rows.Count - 1
                 Dim dt2 As DataTable = L_VerificarCuenta(dt1.Rows(i).Item("obcuenta"))
