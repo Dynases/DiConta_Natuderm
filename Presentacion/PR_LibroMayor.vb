@@ -44,8 +44,14 @@ Public Class PR_LibroMayor
     Private Sub _prCargarGridDetalle()
         Dim dt As New DataTable
         If tbCliente.Tag = 0 Then
-            dt = L_prCuentaReporteLibroMayor(tbNumi.Tag.ToString.Trim, tbFechaDel.Value.ToString("yyyy/MM/dd"), tbFechaAl.Value.ToString("yyyy/MM/dd"))
+            'dt = L_prCuentaReporteLibroMayor(tbNumi.Tag.ToString.Trim, tbFechaDel.Value.ToString("yyyy/MM/dd"), tbFechaAl.Value.ToString("yyyy/MM/dd"))
+            If swCuenta.Value = True Then
+                dt = L_prCuentaReporteLibroMayor(tbNumi.Tag.ToString.Trim, tbFechaDel.Value.ToString("yyyy/MM/dd"), tbFechaAl.Value.ToString("yyyy/MM/dd"))
 
+            Else
+                dt = L_prCuentaReporteLibroMayorTodos(gi_empresaNumi, tbFechaDel.Value.ToString("yyyy/MM/dd"), tbFechaAl.Value.ToString("yyyy/MM/dd"))
+
+            End If
         Else
             dt = L_prCuentaReporteLibroMayorPorCliente(tbNumi.Tag.ToString.Trim, tbFechaDel.Value.ToString("yyyy/MM/dd"), tbFechaAl.Value.ToString("yyyy/MM/dd"), tbCliente.Tag)
         End If
@@ -150,14 +156,14 @@ Public Class PR_LibroMayor
             .Caption = "DEBE"
             .Width = 100
             .HeaderAlignment = Janus.Windows.GridEX.TextAlignment.Center
-            .FormatString = "0.00"
+            .FormatString = "#,##0.00"
             .CellStyle.TextAlignment = TextAlignment.Far
         End With
         With grDetalle.RootTable.Columns("obhaberbs")
             .Caption = "HABER"
             .Width = 100
             .HeaderAlignment = Janus.Windows.GridEX.TextAlignment.Center
-            .FormatString = "0.00"
+            .FormatString = "#,##0.00"
             .CellStyle.TextAlignment = TextAlignment.Far
 
         End With
@@ -165,7 +171,7 @@ Public Class PR_LibroMayor
             .Caption = "SALDO"
             .Width = 100
             .HeaderAlignment = Janus.Windows.GridEX.TextAlignment.Center
-            .FormatString = "0.00"
+            .FormatString = "#,##0.00"
             .CellStyle.TextAlignment = TextAlignment.Far
 
         End With
@@ -173,7 +179,7 @@ Public Class PR_LibroMayor
             .Caption = "FACTOR"
             .Width = 80
             .HeaderAlignment = Janus.Windows.GridEX.TextAlignment.Center
-            .FormatString = "0.00"
+            .FormatString = "#,##0.00"
             .CellStyle.TextAlignment = TextAlignment.Far
 
         End With
@@ -181,7 +187,7 @@ Public Class PR_LibroMayor
             .Caption = "DEBE $US"
             .Width = 100
             .HeaderAlignment = Janus.Windows.GridEX.TextAlignment.Center
-            .FormatString = "0.00"
+            .FormatString = "#,##0.00"
             .CellStyle.TextAlignment = TextAlignment.Far
 
         End With
@@ -189,7 +195,7 @@ Public Class PR_LibroMayor
             .Caption = "HABER $US"
             .Width = 100
             .HeaderAlignment = Janus.Windows.GridEX.TextAlignment.Center
-            .FormatString = "0.00"
+            .FormatString = "#,##0.00"
             .CellStyle.TextAlignment = TextAlignment.Far
 
         End With
@@ -208,26 +214,28 @@ Public Class PR_LibroMayor
             .Caption = "SALDO US"
             .Width = 100
             .HeaderAlignment = Janus.Windows.GridEX.TextAlignment.Center
-            .FormatString = "0.00"
+            .FormatString = "#,##0.00"
             .CellStyle.TextAlignment = TextAlignment.Far
-
         End With
-
+        With grDetalle.RootTable.Columns("obcheque")
+            .Visible = False
+        End With
         With grDetalle
             .GroupByBoxVisible = False
             'diseño de la grilla
             .VisualStyle = VisualStyle.Office2007
-
         End With
-
 
     End Sub
 
     Private Sub _prCargarGridDetalleConTotalesMeses()
         Dim dt As New DataTable
         If tbCliente.Tag = 0 Then
-            dt = L_prCuentaReporteLibroMayor(tbNumi.Tag.ToString.Trim, tbFechaDel.Value.ToString("yyyy/MM/dd"), tbFechaAl.Value.ToString("yyyy/MM/dd"))
-
+            If swCuenta.Value = True Then
+                dt = L_prCuentaReporteLibroMayor(tbNumi.Tag.ToString.Trim, tbFechaDel.Value.ToString("yyyy/MM/dd"), tbFechaAl.Value.ToString("yyyy/MM/dd"))
+            Else
+                dt = L_prCuentaReporteLibroMayorTodos(gi_empresaNumi, tbFechaDel.Value.ToString("yyyy/MM/dd"), tbFechaAl.Value.ToString("yyyy/MM/dd"))
+            End If
         Else
             dt = L_prCuentaReporteLibroMayorPorCliente(tbNumi.Tag.ToString.Trim, tbFechaDel.Value.ToString("yyyy/MM/dd"), tbFechaAl.Value.ToString("yyyy/MM/dd"), tbCliente.Tag)
         End If
@@ -397,14 +405,14 @@ Public Class PR_LibroMayor
             .Caption = "DEBE"
             .Width = 100
             .HeaderAlignment = Janus.Windows.GridEX.TextAlignment.Center
-            .FormatString = "0.00"
             .CellStyle.TextAlignment = TextAlignment.Far
+            .FormatString = "#,##0.00"
         End With
         With grDetalle.RootTable.Columns("obhaberbs")
             .Caption = "HABER"
             .Width = 100
             .HeaderAlignment = Janus.Windows.GridEX.TextAlignment.Center
-            .FormatString = "0.00"
+            .FormatString = "#,##0.00"
             .CellStyle.TextAlignment = TextAlignment.Far
 
         End With
@@ -412,7 +420,7 @@ Public Class PR_LibroMayor
             .Caption = "SALDO"
             .Width = 100
             .HeaderAlignment = Janus.Windows.GridEX.TextAlignment.Center
-            .FormatString = "0.00"
+            .FormatString = "#,##0.00"
             .CellStyle.TextAlignment = TextAlignment.Far
 
         End With
@@ -420,7 +428,7 @@ Public Class PR_LibroMayor
             .Caption = "FACTOR"
             .Width = 80
             .HeaderAlignment = Janus.Windows.GridEX.TextAlignment.Center
-            .FormatString = "0.00"
+            .FormatString = "#,##0.00"
             .CellStyle.TextAlignment = TextAlignment.Far
 
         End With
@@ -428,17 +436,15 @@ Public Class PR_LibroMayor
             .Caption = "DEBE $US"
             .Width = 100
             .HeaderAlignment = Janus.Windows.GridEX.TextAlignment.Center
-            .FormatString = "0.00"
+            .FormatString = "#,##0.00"
             .CellStyle.TextAlignment = TextAlignment.Far
-
         End With
         With grDetalle.RootTable.Columns("obhaberus")
             .Caption = "HABER $US"
             .Width = 100
             .HeaderAlignment = Janus.Windows.GridEX.TextAlignment.Center
-            .FormatString = "0.00"
+            .FormatString = "#,##0.00"
             .CellStyle.TextAlignment = TextAlignment.Far
-
         End With
 
         With grDetalle.RootTable.Columns("orden")
@@ -452,19 +458,19 @@ Public Class PR_LibroMayor
         End With
 
         With grDetalle.RootTable.Columns("saldoSus")
-            .Caption = "SALDO US"
+            .Caption = "SALDO $US"
             .Width = 100
             .HeaderAlignment = Janus.Windows.GridEX.TextAlignment.Center
-            .FormatString = "0.00"
+            .FormatString = "#,##0.00"
             .CellStyle.TextAlignment = TextAlignment.Far
-
         End With
-
+        With grDetalle.RootTable.Columns("obcheque")
+            .Visible = False
+        End With
         With grDetalle
             .GroupByBoxVisible = False
             'diseño de la grilla
             .VisualStyle = VisualStyle.Office2007
-
         End With
 
         Dim fc As GridEXFormatCondition
@@ -572,15 +578,16 @@ Public Class PR_LibroMayor
                                            eToastPosition.BottomLeft)
             Exit Sub
         End If
-
-        If tbNumi.Text = "" Then
-            ToastNotification.Show(Me, "seleccione una cuenta..!!!".ToUpper,
-                                           My.Resources.WARNING, 2000,
-                                           eToastGlowColor.Blue,
-                                           eToastPosition.BottomLeft)
-            Exit Sub
+        If swCuenta.Value = True Then
+            If tbNumi.Text = "" Then
+                ToastNotification.Show(Me, "seleccione una cuenta..!!!".ToUpper,
+                                               My.Resources.WARNING, 2000,
+                                               eToastGlowColor.Blue,
+                                               eToastPosition.BottomLeft)
+                Exit Sub
+            End If
+            gpGrilla.Text = "cuenta ".ToUpper + tbNumi.Text + " " + tbCuenta.Text
         End If
-        gpGrilla.Text = "cuenta ".ToUpper + tbNumi.Text + " " + tbCuenta.Text
         If tbMeses.Value = True Then
             _prCargarGridDetalleConTotalesMeses()
         Else
@@ -732,9 +739,11 @@ Public Class PR_LibroMayor
                     objrep.SetDataSource(dt)
                     objrep.SetParameterValue("fechaDesde", "")
                     objrep.SetParameterValue("fechaHasta", "")
+                    objrep.SetParameterValue("fecha", grDetalle.GetValue("oafdoc"))
                     objrep.SetParameterValue("titulo", gs_empresaDescSistema + " " + gs_empresaDescSistema.ToUpper)
                     objrep.SetParameterValue("direccion", gs_empresaDireccion)
                     objrep.SetParameterValue("nit", gs_empresaNit.ToUpper)
+                    objrep.SetParameterValue("Autor", L_Usuario)
                     objrep.SetParameterValue("ultimoRegistro", 0)
 
                     P_Global.Visualizador.CRV1.ReportSource = objrep 'Comentar
@@ -756,5 +765,12 @@ Public Class PR_LibroMayor
         tbReferencia.Enabled = tbFiltrarRef.Value
         grDetalle.DataSource = Nothing
 
+    End Sub
+
+    Private Sub swCuenta_ValueChanged(sender As Object, e As EventArgs) Handles swCuenta.ValueChanged
+        If swCuenta.Value = False Then
+            tbNumi.Text = ""
+            tbCuenta.Text = ""
+        End If
     End Sub
 End Class

@@ -544,7 +544,7 @@ ControlChars.Lf & "Stack Trace:" & ControlChars.Lf & e.StackTrace
             .CellStyle.TextAlignment = TextAlignment.Far
             .HeaderAlignment = TextAlignment.Center
             .Width = 70
-            .FormatString = "0.00"
+            .FormatString = "#,##0.00"
             .DefaultValue = tbTipoCambio.Value
             .AllowSort = False
             .EditType = EditType.NoEdit
@@ -555,11 +555,11 @@ ControlChars.Lf & "Stack Trace:" & ControlChars.Lf & e.StackTrace
             .CellStyle.TextAlignment = TextAlignment.Far
             .HeaderAlignment = TextAlignment.Center
             .Width = 70
-            .FormatString = "0.00"
+            .FormatString = "#,##0.00"
             .DefaultValue = 0
             .CellStyle.BackColor = Color.LightBlue
             .AggregateFunction = AggregateFunction.Sum
-            .TotalFormatString = "0.00"
+            .TotalFormatString = "#,##0.00"
             .AllowSort = False
 
         End With
@@ -569,12 +569,12 @@ ControlChars.Lf & "Stack Trace:" & ControlChars.Lf & e.StackTrace
             .CellStyle.TextAlignment = TextAlignment.Far
             .HeaderAlignment = TextAlignment.Center
             .Width = 70
-            .FormatString = "0.00"
+            .FormatString = "#,##0.00"
             .DefaultValue = 0
             .CellStyle.BackColor = Color.LightBlue
             .AggregateFunction = AggregateFunction.Sum
             .AllowSort = False
-            .TotalFormatString = "0.00"
+            .TotalFormatString = "#,##0.00"
         End With
 
         With grDetalle.RootTable.Columns("obdebeus")
@@ -582,12 +582,12 @@ ControlChars.Lf & "Stack Trace:" & ControlChars.Lf & e.StackTrace
             .CellStyle.TextAlignment = TextAlignment.Far
             .HeaderAlignment = TextAlignment.Center
             .Width = 70
-            .FormatString = "0.00"
+            .FormatString = "#,##0.00"
             .DefaultValue = 0
             .CellStyle.BackColor = Color.LightGreen
             .AggregateFunction = AggregateFunction.Sum
             .AllowSort = False
-            .TotalFormatString = "0.00"
+            .TotalFormatString = "#,##0.00"
 
         End With
 
@@ -596,12 +596,12 @@ ControlChars.Lf & "Stack Trace:" & ControlChars.Lf & e.StackTrace
             .CellStyle.TextAlignment = TextAlignment.Far
             .HeaderAlignment = TextAlignment.Center
             .Width = 70
-            .FormatString = "0.00"
+            .FormatString = "#,##0.00"
             .DefaultValue = 0
             .CellStyle.BackColor = Color.LightGreen
             .AggregateFunction = AggregateFunction.Sum
             .AllowSort = False
-            .TotalFormatString = "0.00"
+            .TotalFormatString = "#,##0.00"
 
         End With
 
