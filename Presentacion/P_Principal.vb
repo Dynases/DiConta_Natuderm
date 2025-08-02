@@ -58,7 +58,7 @@ Public Class P_Principal
 
         L_prAbrirConexion(gs_Ip, gs_UsuarioSql, gs_ClaveSql, gs_NombreBD)
 
-        L_prAbrirConexionBitacora(gs_Ip, gs_UsuarioSql, gs_ClaveSql, "BHDiconDinoNatu")
+        L_prAbrirConexionBitacora(gs_Ip, gs_UsuarioSql, gs_ClaveSql, "BHDicon_Colegio") 'BHDicon_Colegio23
 
         Me.WindowState = FormWindowState.Maximized
         Me.Text = "DICONTA"
@@ -105,7 +105,11 @@ Public Class P_Principal
         gs_UsuarioSql = Archivo(1).Split("=")(1).Trim
         gs_ClaveSql = Archivo(2).Split("=")(1).Trim
         gs_NombreBD = Archivo(3).Split("=")(1).Trim
-        gs_CarpetaRaiz = Archivo(4).Split("=")(1).Trim
+        gs_CarpetaRaiz = Archivo(8).Split("=")(1).Trim
+        gs_IpMysql = Archivo(4).Split("=")(1).Trim
+        gs_UsuarioMysql = Archivo(5).Split("=")(1).Trim
+        gs_ClaveMysql = Archivo(6).Split("=")(1).Trim
+        gs_NombreBDMySql = Archivo(7).Split("=")(1).Trim
     End Sub
 
     Private Sub _prLogin()

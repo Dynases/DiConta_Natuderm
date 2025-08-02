@@ -311,8 +311,7 @@ Partial Class PR_EstadoCuentasResultadosV2
         '
         Me.GroupPanel1.StyleMouseOver.CornerType = DevComponents.DotNetBar.eCornerType.Square
         Me.GroupPanel1.TabIndex = 121
-        Me.GroupPanel1.Text = "REGIONAL"
-        Me.GroupPanel1.Visible = False
+        Me.GroupPanel1.Text = "AUXILIAR 1"
         '
         'tbVariable
         '

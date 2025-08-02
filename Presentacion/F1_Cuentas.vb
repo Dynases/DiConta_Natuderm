@@ -2,6 +2,7 @@
 Imports Janus.Windows.GridEX
 Imports Logica.AccesoLogica
 Imports DevComponents.DotNetBar.Controls
+Imports MySql.Data.MySqlClient
 
 Public Class F1_Cuentas
 
@@ -229,7 +230,6 @@ Public Class F1_Cuentas
         With grDetalle.RootTable.Columns("cenumitc3")
             .Caption = "AUXILIAR"
             .Width = 200
-
             .HasValueList = True
             'Set EditType to Combo or DropDownList.
             'In a MultipleValues Column, the dropdown will appear with a CheckBox
@@ -400,9 +400,9 @@ Public Class F1_Cuentas
         _prCargarGridDetalle(-1)
 
         'agregar los auxiliares bases
-        Dim dt As DataTable = CType(grDetalle.DataSource, DataTable)
-        dt.Rows.Add(0, 0, 1, 0, "", 0)
-        dt.Rows.Add(0, 0, 11, 0, "", 0)
+        'Dim dt As DataTable = CType(grDetalle.DataSource, DataTable)
+        'dt.Rows.Add(0, 0, 1, 0, "", 0)
+        'dt.Rows.Add(0, 0, 11, 0, "", 0)
 
 
     End Sub
@@ -425,6 +425,7 @@ Public Class F1_Cuentas
         Dim dtDetalle As DataTable = CType(grDetalle.DataSource, DataTable).DefaultView.ToTable(True, "cenumi", "cenumitc1", "cenumitc3", "cenumitc31", "estado")
         Dim res As Boolean = L_prCuentaGrabar(tbNumi.Text, gi_empresaNumi, tbCuenta.Text, tbDesc.Text, tbNivel.Text, IIf(tbMoneda.Value = True, "SU", "BO"), tbTipo.Value, tbNumiPadre.Text, dtDetalle)
         If res Then
+            GrabarCuentaMysql(tbNumi.Text, tbCuenta.Text, tbDesc.Text, tbNivel.Text, IIf(tbMoneda.Value = True, "SU", "BO"), tbTipo.Value, tbNumiPadre.Text)
             ToastNotification.Show(Me, "Registro ".ToUpper + tbNumi.Text + " Grabado con Exito.".ToUpper, My.Resources.GRABACION_EXITOSA, 5000, eToastGlowColor.Green, eToastPosition.TopCenter)
             'tbCuenta.Focus()
             _PSalirRegistro()
@@ -433,10 +434,125 @@ Public Class F1_Cuentas
 
     End Function
 
+
+    Private Function VerificarConexion(ByRef conexion As MySqlConnection) As Boolean
+
+        Dim connectionString As String = "Server=" + gs_IpMysql + "; Database=" + gs_NombreBDMySql + "; Uid=" + gs_UsuarioMysql + "; Pwd=" + gs_ClaveMysql + "; SslMode=none;"
+
+        Using conn As New MySqlConnection(connectionString)
+            Try
+
+                conn.Open()
+
+
+                conexion = conn
+
+
+                Return True
+            Catch ex As Exception
+
+                MessageBox.Show("Error al conectar a la base de datos: " & ex.Message)
+                Return False
+            End Try
+        End Using
+
+
+    End Function
+    Public Sub GrabarCuentaMysql(canumi As Integer, cacta As String, cadesc As String, caniv As Integer, camon As String, catipo As Integer, capadre As Integer)
+        Try
+            If VerificarConexion(conn) Then
+
+                conn.Open()
+
+                Dim insertQuery As String = "INSERT INTO tc001 (canumi, cacta,cadesc,caniv,camon,catipo,capadre) VALUES (@canumi, @cacta, @cadesc, @caniv, @camon, @catipo, @capadre)"
+                Using cmd1 As New MySqlCommand(insertQuery, conn)
+                    cmd1.Parameters.AddWithValue("@canumi", canumi)
+                    cmd1.Parameters.AddWithValue("@cacta", cacta)
+                    cmd1.Parameters.AddWithValue("@cadesc", cadesc)
+                    cmd1.Parameters.AddWithValue("@caniv", caniv)
+                    cmd1.Parameters.AddWithValue("@camon", camon)
+                    cmd1.Parameters.AddWithValue("@catipo", catipo)
+                    cmd1.Parameters.AddWithValue("@capadre", capadre)
+
+
+
+                    cmd1.ExecuteNonQuery()
+
+                End Using
+
+            End If
+        Catch ex As Exception
+
+            MessageBox.Show(ex.Message)
+
+        End Try
+    End Sub
+
+    Public Sub ModificarCuentaMysql(canumi As Integer, cacta As String, cadesc As String, caniv As Integer, camon As String, catipo As Integer, capadre As Integer)
+        Try
+            If VerificarConexion(conn) Then
+
+                conn.Open()
+
+                Dim deleteQuery As String = "delete from tc001 where canumi = @canumi"
+                Using delete As New MySqlCommand(deleteQuery, conn)
+                    delete.Parameters.AddWithValue("@canumi", canumi)
+
+                    delete.ExecuteNonQuery()
+
+                End Using
+
+                Dim insertQuery As String = "INSERT INTO tc001 (canumi, cacta,cadesc,caniv,camon,catipo,capadre) VALUES (@canumi, @cacta, @cadesc, @caniv, @camon, @catipo, @capadre)"
+                Using cmd1 As New MySqlCommand(insertQuery, conn)
+                    cmd1.Parameters.AddWithValue("@canumi", canumi)
+                    cmd1.Parameters.AddWithValue("@cacta", cacta)
+                    cmd1.Parameters.AddWithValue("@cadesc", cadesc)
+                    cmd1.Parameters.AddWithValue("@caniv", caniv)
+                    cmd1.Parameters.AddWithValue("@camon", camon)
+                    cmd1.Parameters.AddWithValue("@catipo", catipo)
+                    cmd1.Parameters.AddWithValue("@capadre", capadre)
+
+
+
+                    cmd1.ExecuteNonQuery()
+
+                End Using
+
+            End If
+        Catch ex As Exception
+
+            MessageBox.Show(ex.Message)
+
+        End Try
+    End Sub
+
+    Public Sub EliminarCuentaMysql(canumi As Integer)
+        Try
+            If VerificarConexion(conn) Then
+
+                conn.Open()
+
+                Dim deleteQuery As String = "delete from tc001 where canumi = @canumi"
+                Using delete As New MySqlCommand(deleteQuery, conn)
+                    delete.Parameters.AddWithValue("@canumi", canumi)
+
+                    delete.ExecuteNonQuery()
+
+                End Using
+            End If
+        Catch ex As Exception
+
+            MessageBox.Show(ex.Message)
+
+        End Try
+    End Sub
+
     Public Overrides Function _PMOModificarRegistro() As Boolean
         Dim dtDetalle As DataTable = CType(grDetalle.DataSource, DataTable).DefaultView.ToTable(True, "cenumi", "cenumitc1", "cenumitc3", "cenumitc31", "estado")
         Dim res As Boolean = L_prCuentaModificar(tbNumi.Text, gi_empresaNumi, tbCuenta.Text, tbDesc.Text, tbNivel2.Text, IIf(tbMoneda.Value = True, "SU", "BO"), tbTipo.Value, tbPadre.Text, dtDetalle)
         If res Then
+            ModificarCuentaMysql(tbNumi.Text, tbCuenta.Text, tbDesc.Text, tbNivel.Text, IIf(tbMoneda.Value = True, "SU", "BO"), tbTipo.Value, tbNumiPadre.Text)
+
             ToastNotification.Show(Me, "Registro ".ToUpper + tbNumi.Text + " modificado con Exito.".ToUpper, My.Resources.GRABACION_EXITOSA, 5000, eToastGlowColor.Green, eToastPosition.TopCenter)
             _PSalirRegistro()
 
@@ -452,6 +568,7 @@ Public Class F1_Cuentas
                 Dim mensajeError As String = ""
                 Dim res As Boolean = L_prCuentaBorrar(tbNumi.Text, 1, tbCuenta.Text, tbDesc.Text, tbNivel2.Text, IIf(tbMoneda.Value = True, "SU", "BO"), tbTipo.Value, tbPadre.Text, mensajeError)
                 If res Then
+                    EliminarCuentaMysql(tbNumi.Text)
                     ToastNotification.Show(Me, "Codigo de equipo ".ToUpper + tbNumi.Text + " eliminado con Exito.".ToUpper, My.Resources.GRABACION_EXITOSA, 5000, eToastGlowColor.Green, eToastPosition.TopCenter)
                     _PMFiltrar()
                 Else

@@ -122,7 +122,6 @@ Public Class AccesoDatos
             Dim nombre As String = _listaParam.Item(i).nombre
             Dim valor As String = _listaParam.Item(i).valor
             Dim detalle As DataTable = _listaParam.Item(i).detalle
-
             If IsNothing(detalle) Then
                 _comandoProcedimientoHistorial.Parameters.AddWithValue(nombre, valor)
             Else

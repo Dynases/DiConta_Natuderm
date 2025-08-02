@@ -11,6 +11,11 @@ Module P_Global
     Public gs_ClaveSql As String = "123"
     Public gs_NombreBD As String = "BDDicon"
     Public gs_CarpetaRaiz As String = "C:\BD"
+    Public gs_IpMysql As String = "127.0.0.1"
+    Public gs_UsuarioMysql As String = "sa"
+    Public gs_ClaveMysql As String = "123"
+    Public gs_NombreBDMySql As String = "BDDicon"
+
 
 #Region "Variables"
 

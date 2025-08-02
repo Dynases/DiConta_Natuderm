@@ -5,6 +5,7 @@ Imports Modelos
 Imports DevComponents.DotNetBar.Controls
 Imports System.Math
 Imports System.IO
+Imports MySql.Data.MySqlClient
 
 Public Class F0_Comprobante
 
@@ -1249,37 +1250,37 @@ ControlChars.Lf & "Stack Trace:" & ControlChars.Lf & e.StackTrace
 
         Dim fc As GridEXFormatCondition
         fc = New GridEXFormatCondition(grAyudaCuenta.RootTable.Columns("catipo"), ConditionOperator.Equal, 1)
-        fc.FormatStyle.BackColor = Color.LightGreen
+        fc.FormatStyle.BackColor = Color.Transparent 'LightGreen
         grAyudaCuenta.RootTable.FormatConditions.Add(fc)
 
         fc = New GridEXFormatCondition(grAyudaCuenta.RootTable.Columns("catipo"), ConditionOperator.Equal, 2)
-        fc.FormatStyle.BackColor = Color.LightYellow
+        fc.FormatStyle.BackColor = Color.Transparent 'LightYellow
         grAyudaCuenta.RootTable.FormatConditions.Add(fc)
 
         fc = New GridEXFormatCondition(grAyudaCuenta.RootTable.Columns("catipo"), ConditionOperator.Equal, 3)
-        fc.FormatStyle.BackColor = Color.LightBlue
+        fc.FormatStyle.BackColor = Color.Transparent 'LightBlue
         grAyudaCuenta.RootTable.FormatConditions.Add(fc)
 
         fc = New GridEXFormatCondition(grAyudaCuenta.RootTable.Columns("catipo"), ConditionOperator.Equal, 4)
-        fc.FormatStyle.BackColor = Color.LightCoral
+        fc.FormatStyle.BackColor = Color.Transparent 'LightCoral
         grAyudaCuenta.RootTable.FormatConditions.Add(fc)
 
         fc = New GridEXFormatCondition(grAyudaCuenta.RootTable.Columns("catipo"), ConditionOperator.Equal, 5)
-        fc.FormatStyle.BackColor = Color.LightSlateGray
+        fc.FormatStyle.BackColor = Color.Transparent 'LightSlateGray
         grAyudaCuenta.RootTable.FormatConditions.Add(fc)
 
         fc = New GridEXFormatCondition(grAyudaCuenta.RootTable.Columns("catipo"), ConditionOperator.Equal, 6)
-        fc.FormatStyle.BackColor = Color.LightGreen
+        fc.FormatStyle.BackColor = Color.Transparent 'LightGreen
         grAyudaCuenta.RootTable.FormatConditions.Add(fc)
 
         'setear todas las que son mayores
         fc = New GridEXFormatCondition(grAyudaCuenta.RootTable.Columns("caniv"), ConditionOperator.LessThanOrEqualTo, 4)
         fc.FormatStyle.FontBold = TriState.True
-        fc.FormatStyle.ForeColor = Color.Red
+        fc.FormatStyle.ForeColor = Color.Black
         grAyudaCuenta.RootTable.FormatConditions.Add(fc)
 
-        fc = New GridEXFormatCondition(grAyudaCuenta.RootTable.Columns("caniv"), ConditionOperator.LessThanOrEqualTo, 5)
-        fc.FormatStyle.FontBold = TriState.True
+        fc = New GridEXFormatCondition(grAyudaCuenta.RootTable.Columns("caniv"), ConditionOperator.Equal, 5) 'LessThanOrEqualTo, 5)
+        fc.FormatStyle.FontBold = TriState.False
         grAyudaCuenta.RootTable.FormatConditions.Add(fc)
 
         'poner el focus en la grilla
@@ -1663,7 +1664,7 @@ ControlChars.Lf & "Stack Trace:" & ControlChars.Lf & e.StackTrace
     Private Sub _prImprimir()
 
         If gs_tipoComprobante = 1 Then
-            Dim objrep As New R_Comprobante1
+            Dim objrep As New R_Comprobante2
             Dim dt As New DataTable
             dt = L_prComprobanteReporteComprobante(tbNumi.Text)
 
@@ -2132,6 +2133,16 @@ ControlChars.Lf & "Stack Trace:" & ControlChars.Lf & e.StackTrace
                 _prImprimir()
 
                 L_prComprobanteEliminarRespaldo(gi_userNumi)
+
+                dtDetalle = CType(grDetalle.DataSource, DataTable)
+                _prPonerLine(dtDetalle)
+                dtDetalle = dtDetalle.DefaultView.ToTable(True, "obnumi", "obnumito1", "oblin", "obcuenta", "cacta", "obaux1", "obaux2",
+                                                      "obaux3", "obobs", "obobs2", "obcheque", "obtc", "obdebebs",
+                                                      "obhaberbs", "obdebeus", "obhaberus", "estado")
+                InsertarDatosMySql(tbNumi.Text, tbNroDoc.Text, tbTipo.Value, tbAnio.Text, tbMes.Text,
+                                                          tbNum.Text, fecha.ToString("yyyy/MM/dd hh:mm:ss"), tbTipoCambio.Value,
+                                                          tbGlosa.Text, tbObs.Text, gs_user, dtDetalle)
+
             End If
             Return res
         Catch ex As Exception
@@ -2165,6 +2176,14 @@ ControlChars.Lf & "Stack Trace:" & ControlChars.Lf & e.StackTrace
                                                           tbGlosa.Text, tbObs.Text, gi_empresaNumi, dtDetalle, _detalleDetalle, _detalleDetalleCompras)
             If res Then
                 Dim mensaje = "Codigo ".ToUpper + tbNumi.Text + " modificado con Exito.".ToUpper
+                dtDetalle = CType(grDetalle.DataSource, DataTable)
+                _prPonerLine(dtDetalle)
+                dtDetalle = dtDetalle.DefaultView.ToTable(True, "obnumi", "obnumito1", "oblin", "obcuenta", "cacta", "obaux1", "obaux2",
+                                                      "obaux3", "obobs", "obobs2", "obcheque", "obtc", "obdebebs",
+                                                      "obhaberbs", "obdebeus", "obhaberus", "estado")
+                ModificarDatosMySql(tbNumi.Text, tbNroDoc.Text, tbTipo.Value, tbAnio.Text, tbMes.Text,
+                                                          tbNum.Text, fecha.ToString("yyyy/MM/dd hh:mm:ss"), tbTipoCambio.Value,
+                                                          tbGlosa.Text, tbObs.Text, gs_user, dtDetalle)
                 MostrarMensajeOk(mensaje)
             End If
             Return res
@@ -2175,6 +2194,172 @@ ControlChars.Lf & "Stack Trace:" & ControlChars.Lf & e.StackTrace
 
     End Function
 
+    Private Sub ModificarDatosMySql(oanumi As Integer, oanumdoc As String, oatip As Integer, oaano As Integer, oames As Integer, oanum As Integer,
+                                   oafdoc As String, oatc As Double, oaglosa As String, oaobs As String, oauser As String, detalle As DataTable)
+        Dim resultadoFilas() As DataRow = detalle.Select("cacta like '7%'")
+        Dim dt As DataTable = detalle.Clone()
+        dt.Clear()
+        For Each fila As DataRow In resultadoFilas
+            dt.ImportRow(fila)
+        Next
+
+        Dim conn As MySqlConnection
+
+
+
+
+        If dt.Rows.Count > 0 Then
+            If VerificarConexion(conn) Then
+
+                conn.Open()
+                Dim fecha As DateTime = "24/01/2025"
+
+                Dim deleteQuery As String = "delete from to0011 where obnumito1 =@oanumi; delete from to001 where oanumi = @oanumi"
+                Using delete As New MySqlCommand(deleteQuery, conn)
+                    delete.Parameters.AddWithValue("@oanumi", oanumi)
+
+                    delete.ExecuteNonQuery()
+                End Using
+
+
+                Dim insertQuery As String = "INSERT INTO to001 (oanumi, oanumdoc,oatip,oaano,oames,oanum,oafdoc,oatc,oaglosa,oaobs,oauser) VALUES (@valor1, @valor2, @valor3, @valor4, @valor5, @valor6, @valor7, @valor8, @valor9, @valor10, @valor11)"
+                Using cmd1 As New MySqlCommand(insertQuery, conn)
+                    cmd1.Parameters.AddWithValue("@valor1", oanumi)
+                    cmd1.Parameters.AddWithValue("@valor2", oanumdoc)
+                    cmd1.Parameters.AddWithValue("@valor3", oatip)
+                    cmd1.Parameters.AddWithValue("@valor4", oaano)
+                    cmd1.Parameters.AddWithValue("@valor5", oames)
+                    cmd1.Parameters.AddWithValue("@valor6", oanum)
+                    cmd1.Parameters.AddWithValue("@valor7", oafdoc)
+                    cmd1.Parameters.AddWithValue("@valor8", oatc)
+                    cmd1.Parameters.AddWithValue("@valor9", oaglosa)
+                    cmd1.Parameters.AddWithValue("@valor10", oaobs)
+                    cmd1.Parameters.AddWithValue("@valor11", oauser)
+
+
+                    cmd1.ExecuteNonQuery()
+
+
+
+                    For i = 0 To detalle.Rows.Count - 1 Step 1
+                        Dim insertQueryDetalle As String = "INSERT INTO to0011 (obnumi, obnumito1,oblin,obcuenta,obobs,obobs2,obtc,obdebebs,obhaberbs,obdebeus,obhaberus) VALUES (@valor1, @valor2, @valor3, @valor4, @valor5, @valor6, @valor7, @valor8, @valor9, @valor10, @valor11)"
+                        Using cmd2 As New MySqlCommand(insertQueryDetalle, conn)
+                            cmd2.Parameters.AddWithValue("@valor1", detalle.Rows(i).Item("obnumi"))
+                            cmd2.Parameters.AddWithValue("@valor2", oanumi)
+                            cmd2.Parameters.AddWithValue("@valor3", detalle.Rows(i).Item("oblin"))
+                            cmd2.Parameters.AddWithValue("@valor4", detalle.Rows(i).Item("obcuenta"))
+                            cmd2.Parameters.AddWithValue("@valor5", detalle.Rows(i).Item("obobs"))
+                            cmd2.Parameters.AddWithValue("@valor6", "") 'detalle.Rows(i).Item("obobs2"))
+                            cmd2.Parameters.AddWithValue("@valor7", detalle.Rows(i).Item("obtc"))
+                            cmd2.Parameters.AddWithValue("@valor8", detalle.Rows(i).Item("obdebebs"))
+                            cmd2.Parameters.AddWithValue("@valor9", detalle.Rows(i).Item("obhaberbs"))
+                            cmd2.Parameters.AddWithValue("@valor10", detalle.Rows(i).Item("obdebeus"))
+                            cmd2.Parameters.AddWithValue("@valor11", detalle.Rows(i).Item("obhaberus"))
+
+                            cmd2.ExecuteNonQuery()
+                        End Using
+                    Next
+                End Using
+            End If
+        End If
+
+    End Sub
+
+    Private Sub InsertarDatosMySql(oanumi As Integer, oanumdoc As String, oatip As Integer, oaano As Integer, oames As Integer, oanum As Integer,
+                                   oafdoc As String, oatc As Double, oaglosa As String, oaobs As String, oauser As String, detalle As DataTable)
+        Dim resultadoFilas() As DataRow = detalle.Select("cacta like '7%'")
+        Dim dt As DataTable = detalle.Clone()
+        dt.Clear()
+        For Each fila As DataRow In resultadoFilas
+            dt.ImportRow(fila)
+        Next
+
+        Dim conn As MySqlConnection
+
+        If dt.Rows.Count > 0 Then
+            If VerificarConexion(conn) Then
+
+                conn.Open()
+                Dim fecha As DateTime = "24/01/2025"
+
+
+
+
+                Dim insertQuery As String = "INSERT INTO to001 (oanumi, oanumdoc,oatip,oaano,oames,oanum,oafdoc,oatc,oaglosa,oaobs,oauser) VALUES (@valor1, @valor2, @valor3, @valor4, @valor5, @valor6, @valor7, @valor8, @valor9, @valor10, @valor11)"
+                Using cmd1 As New MySqlCommand(insertQuery, conn)
+                    cmd1.Parameters.AddWithValue("@valor1", oanumi)
+                    cmd1.Parameters.AddWithValue("@valor2", oanumdoc)
+                    cmd1.Parameters.AddWithValue("@valor3", oatip)
+                    cmd1.Parameters.AddWithValue("@valor4", oaano)
+                    cmd1.Parameters.AddWithValue("@valor5", oames)
+                    cmd1.Parameters.AddWithValue("@valor6", oanum)
+                    cmd1.Parameters.AddWithValue("@valor7", oafdoc)
+                    cmd1.Parameters.AddWithValue("@valor8", oatc)
+                    cmd1.Parameters.AddWithValue("@valor9", oaglosa)
+                    cmd1.Parameters.AddWithValue("@valor10", oaobs)
+                    cmd1.Parameters.AddWithValue("@valor11", oauser)
+
+
+                    cmd1.ExecuteNonQuery()
+
+
+
+                    For i = 0 To detalle.Rows.Count - 1 Step 1
+                        Dim insertQueryDetalle As String = "INSERT INTO to0011 (obnumi, obnumito1,oblin,obcuenta,obobs,obobs2,obtc,obdebebs,obhaberbs,obdebeus,obhaberus) VALUES (@valor1, @valor2, @valor3, @valor4, @valor5, @valor6, @valor7, @valor8, @valor9, @valor10, @valor11)"
+                        Using cmd2 As New MySqlCommand(insertQueryDetalle, conn)
+                            cmd2.Parameters.AddWithValue("@valor1", detalle.Rows(i).Item("obnumi"))
+                            cmd2.Parameters.AddWithValue("@valor2", oanumi)
+                            cmd2.Parameters.AddWithValue("@valor3", detalle.Rows(i).Item("oblin"))
+                            cmd2.Parameters.AddWithValue("@valor4", detalle.Rows(i).Item("obcuenta"))
+                            cmd2.Parameters.AddWithValue("@valor5", detalle.Rows(i).Item("obobs"))
+                            cmd2.Parameters.AddWithValue("@valor6", "") 'detalle.Rows(i).Item("obobs2"))
+                            cmd2.Parameters.AddWithValue("@valor7", detalle.Rows(i).Item("obtc"))
+                            cmd2.Parameters.AddWithValue("@valor8", detalle.Rows(i).Item("obdebebs"))
+                            cmd2.Parameters.AddWithValue("@valor9", detalle.Rows(i).Item("obhaberbs"))
+                            cmd2.Parameters.AddWithValue("@valor10", detalle.Rows(i).Item("obdebeus"))
+                            cmd2.Parameters.AddWithValue("@valor11", detalle.Rows(i).Item("obhaberus"))
+
+                            cmd2.ExecuteNonQuery()
+                        End Using
+                    Next
+                End Using
+            End If
+        End If
+
+    End Sub
+
+    Private Sub EliminarDatosMySql(oanumi As Integer, detalle As DataTable)
+        Dim resultadoFilas() As DataRow = detalle.Select("cacta like '7%'")
+        Dim dt As DataTable = detalle.Clone()
+        dt.Clear()
+        For Each fila As DataRow In resultadoFilas
+            dt.ImportRow(fila)
+        Next
+
+        Dim conn As MySqlConnection
+
+
+
+
+        If dt.Rows.Count > 0 Then
+            If VerificarConexion(conn) Then
+
+                conn.Open()
+
+                Dim deleteQuery As String = "delete from to0011 where obnumito1 =@oanumi; delete from to001 where oanumi = @oanumi"
+                Using delete As New MySqlCommand(deleteQuery, conn)
+                    delete.Parameters.AddWithValue("@oanumi", oanumi)
+
+                    delete.ExecuteNonQuery()
+                End Using
+
+
+
+            End If
+        End If
+
+    End Sub
+
     Public Sub _PMOEliminarRegistro()
         Dim dtUltimoCompr As DataTable = L_prObtenerUltimoComprobantePorTipoAnioMesEmpresa(tbTipo.Value, tbAnio.Text, tbMes.Text, gi_empresaNumi)
         If dtUltimoCompr.Rows.Count > 0 Then
@@ -2184,11 +2369,18 @@ ControlChars.Lf & "Stack Trace:" & ControlChars.Lf & e.StackTrace
                 If result = eTaskDialogResult.Yes Then
                     Dim mensajeError As String = ""
                     Dim res As Boolean = L_prComprobanteBorrar(tbNumi.Text, tbNroDoc.Text, tbTipo.Value, tbAnio.Text, tbMes.Text, tbNum.Text, tbFecha.Value.ToString("yyyy/MM/dd"), tbTipoCambio.Value, tbGlosa.Text, tbObs.Text, gi_empresaNumi, mensajeError)
-                    If res Then
-                        ToastNotification.Show(Me, "Codigo ".ToUpper + tbNumi.Text + " eliminado con Exito.".ToUpper, My.Resources.GRABACION_EXITOSA, 5000, eToastGlowColor.Green, eToastPosition.TopCenter)
-                        _PMFiltrar()
-                    Else
-                        ToastNotification.Show(Me, mensajeError, My.Resources.WARNING, 8000, eToastGlowColor.Red, eToastPosition.TopCenter)
+                If res Then
+
+                    dtDetalle = CType(grDetalle.DataSource, DataTable)
+                    _prPonerLine(dtDetalle)
+                    dtDetalle = dtDetalle.DefaultView.ToTable(True, "obnumi", "obnumito1", "oblin", "obcuenta", "cacta", "obaux1", "obaux2",
+                                                      "obaux3", "obobs", "obobs2", "obcheque", "obtc", "obdebebs",
+                                                      "obhaberbs", "obdebeus", "obhaberus", "estado")
+                    EliminarDatosMySql(tbNumi.Text, dtDetalle)
+                    ToastNotification.Show(Me, "Codigo ".ToUpper + tbNumi.Text + " eliminado con Exito.".ToUpper, My.Resources.GRABACION_EXITOSA, 5000, eToastGlowColor.Green, eToastPosition.TopCenter)
+                    _PMFiltrar()
+                Else
+                    ToastNotification.Show(Me, mensajeError, My.Resources.WARNING, 8000, eToastGlowColor.Red, eToastPosition.TopCenter)
                     End If
                 End If
             'Else
@@ -2398,9 +2590,53 @@ ControlChars.Lf & "Stack Trace:" & ControlChars.Lf & e.StackTrace
         End If
     End Sub
 
+    Private Function VerificarConexion(ByRef conexion As MySqlConnection) As Boolean
+
+        Dim connectionString As String = "Server=" + gs_IpMysql + "; Database=" + gs_NombreBDMySql + "; Uid=" + gs_UsuarioMysql + "; Pwd=" + gs_ClaveMysql + "; SslMode=none;"
+
+
+
+        ' Crear una conexión MySQL
+        Using conn As New MySqlConnection(connectionString)
+            Try
+                ' Abrir la conexión
+                conn.Open()
+
+
+                conexion = conn
+
+                'Dim insertQuery As String = "DELETE FROM to001 WHERE oanumi = 1;"
+                'Using cmd1 As New MySqlCommand(insertQuery, conn)
+                '    cmd1.ExecuteNonQuery()
+
+                'End Using
+
+                ''''' Crear una consulta
+                ''''Dim query As String = "SELECT * FROM to001"  ' Cambia 'tabla' por el nombre de tu tabla
+
+                ''''' Crear un comando para ejecutar la consulta
+                ''''Dim cmd As New MySqlCommand(query, conn)
+
+                ''''' Ejecutar la consulta y obtener el resultado
+                ''''Using reader As MySqlDataReader = cmd.ExecuteReader()
+                ''''    While reader.Read()
+                ''''        ' Leer los datos (esto es solo un ejemplo)
+                ''''        MessageBox.Show(reader("oanumi").ToString())  ' Cambia 'nombre_columna' por el nombre de una columna
+                ''''    End While
+                ''''End Using
+                Return True
+            Catch ex As Exception
+
+                MessageBox.Show("Error al conectar a la base de datos: " & ex.Message)
+                Return False
+            End Try
+        End Using
+
+    End Function
+
     Private Sub btnNuevo_Click(sender As Object, e As EventArgs) Handles btnNuevo.Click
         Try
-
+            'VerificarConexion()
             _EsNuevo = True
             tbTipo.Focus()
             Dim dtTipoCambio As DataTable = L_prTipoCambioGeneralPorFecha(Now.ToString("yyyy/MM/dd"))
@@ -2601,7 +2837,7 @@ ControlChars.Lf & "Stack Trace:" & ControlChars.Lf & e.StackTrace
                 frmAyuda.grJBuscador.DefaultFilterRowComparison = FilterConditionOperator.BeginsWith
                 Dim fc As GridEXFormatCondition
                 fc = New GridEXFormatCondition(frmAyuda.grJBuscador.RootTable.Columns("catipo"), ConditionOperator.Equal, 1)
-                fc.FormatStyle.BackColor = Color.LightGreen
+                fc.FormatStyle.BackColor = Color.Transparent
                 frmAyuda.grJBuscador.RootTable.FormatConditions.Add(fc)
 
                 fc = New GridEXFormatCondition(frmAyuda.grJBuscador.RootTable.Columns("catipo"), ConditionOperator.Equal, 2)
@@ -2609,7 +2845,7 @@ ControlChars.Lf & "Stack Trace:" & ControlChars.Lf & e.StackTrace
                 frmAyuda.grJBuscador.RootTable.FormatConditions.Add(fc)
 
                 fc = New GridEXFormatCondition(frmAyuda.grJBuscador.RootTable.Columns("catipo"), ConditionOperator.Equal, 3)
-                fc.FormatStyle.BackColor = Color.LightBlue
+                fc.FormatStyle.BackColor = Color.Transparent
                 frmAyuda.grJBuscador.RootTable.FormatConditions.Add(fc)
 
                 fc = New GridEXFormatCondition(frmAyuda.grJBuscador.RootTable.Columns("catipo"), ConditionOperator.Equal, 4)
@@ -3075,28 +3311,36 @@ ControlChars.Lf & "Stack Trace:" & ControlChars.Lf & e.StackTrace
 
         If e.KeyData = Keys.Control + Keys.A And btnGrabar.Enabled = True And grAyudaCuenta.Tag = -1 And grAyudaCuenta.Row = -2 Then
             'desea agregar a un nuevo cliente
-            Dim ci As String = "" 'grAyudaCuenta.GetValue("cjci").ToString
-            Dim nombre As String = grAyudaCuenta.GetValue("cjnombre").ToString
-            Dim numiNuevo As String = ""
-            L_prClientesComprobanteGrabar(numiNuevo, ci, nombre, "1", grDetalle.GetValue("obcuenta"))
-            _prCargarGridAyudaClienteCobrar(grDetalle.GetValue("obcuenta"))
-            grAyudaCuenta.Tag = -1
+            If grAyudaCuenta.RowCount = 0 Then
+                Dim ci As String = "" 'grAyudaCuenta.GetValue("cjci").ToString
+                Dim nombre As String = grAyudaCuenta.GetValue("cjnombre").ToString
+                Dim numiNuevo As String = ""
+                L_prClientesComprobanteGrabar(numiNuevo, ci, nombre, "1", grDetalle.GetValue("obcuenta"))
+                _prCargarGridAyudaClienteCobrar(grDetalle.GetValue("obcuenta"))
+                grAyudaCuenta.Tag = -1
 
-            grAyudaCuenta.RootTable.ApplyFilter(New Janus.Windows.GridEX.GridEXFilterCondition(grAyudaCuenta.RootTable.Columns("cjnombre"), Janus.Windows.GridEX.ConditionOperator.Equal, nombre))
-
+                grAyudaCuenta.RootTable.ApplyFilter(New Janus.Windows.GridEX.GridEXFilterCondition(grAyudaCuenta.RootTable.Columns("cjnombre"), Janus.Windows.GridEX.ConditionOperator.Equal, nombre))
+            Else
+                ToastNotification.Show(Me, "Primero debe agregar un nombre".ToUpper, My.Resources.WARNING, 3000, eToastGlowColor.Blue, eToastPosition.TopCenter)
+                Return
+            End If
         End If
 
         If e.KeyData = Keys.Control + Keys.A And btnGrabar.Enabled = True And grAyudaCuenta.Tag = -2 And grAyudaCuenta.Row = -2 Then
             'desea agregar a un nuevo cliente
-            Dim ci As String = "" 'grAyudaCuenta.GetValue("cjci").ToString
-            Dim nombre As String = grAyudaCuenta.GetValue("cjnombre").ToString
-            Dim numiNuevo As String = ""
-            L_prClientesComprobanteGrabar(numiNuevo, ci, nombre, "2", grDetalle.GetValue("obcuenta"))
-            _prCargarGridAyudaClientePagar(grDetalle.GetValue("obcuenta"))
-            grAyudaCuenta.Tag = -2
+            If grAyudaCuenta.RowCount = 0 Then
+                Dim ci As String = "" 'grAyudaCuenta.GetValue("cjci").ToString
+                Dim nombre As String = grAyudaCuenta.GetValue("cjnombre").ToString
+                Dim numiNuevo As String = ""
+                L_prClientesComprobanteGrabar(numiNuevo, ci, nombre, "2", grDetalle.GetValue("obcuenta"))
+                _prCargarGridAyudaClientePagar(grDetalle.GetValue("obcuenta"))
+                grAyudaCuenta.Tag = -2
 
-            grAyudaCuenta.RootTable.ApplyFilter(New Janus.Windows.GridEX.GridEXFilterCondition(grAyudaCuenta.RootTable.Columns("cjnombre"), Janus.Windows.GridEX.ConditionOperator.Equal, nombre))
-
+                grAyudaCuenta.RootTable.ApplyFilter(New Janus.Windows.GridEX.GridEXFilterCondition(grAyudaCuenta.RootTable.Columns("cjnombre"), Janus.Windows.GridEX.ConditionOperator.Equal, nombre))
+            Else
+                ToastNotification.Show(Me, "Primero debe agregar un nombre".ToUpper, My.Resources.WARNING, 3000, eToastGlowColor.Blue, eToastPosition.TopCenter)
+            Return
+        End If
         End If
 
         Dim f As Integer = grAyudaCuenta.Row

@@ -311,8 +311,7 @@ Partial Class PR_BalanceComprobacionSumasSaldos
         '
         Me.GroupPanel1.StyleMouseOver.CornerType = DevComponents.DotNetBar.eCornerType.Square
         Me.GroupPanel1.TabIndex = 123
-        Me.GroupPanel1.Text = "REGIONAL"
-        Me.GroupPanel1.Visible = False
+        Me.GroupPanel1.Text = "AUXILIAR 1"
         '
         'tbVariable
         '
@@ -398,8 +397,7 @@ Partial Class PR_BalanceComprobacionSumasSaldos
         '
         Me.GroupPanel2.StyleMouseOver.CornerType = DevComponents.DotNetBar.eCornerType.Square
         Me.GroupPanel2.TabIndex = 124
-        Me.GroupPanel2.Text = "SUCURSALES"
-        Me.GroupPanel2.Visible = False
+        Me.GroupPanel2.Text = "AUXILIAR 2"
         '
         'tbVariableSucursal
         '

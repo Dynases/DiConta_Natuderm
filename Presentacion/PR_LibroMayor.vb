@@ -217,9 +217,9 @@ Public Class PR_LibroMayor
             .FormatString = "#,##0.00"
             .CellStyle.TextAlignment = TextAlignment.Far
         End With
-        With grDetalle.RootTable.Columns("obcheque")
-            .Visible = False
-        End With
+        'With grDetalle.RootTable.Columns("obcheque")
+        '    .Visible = False
+        'End With
         With grDetalle
             .GroupByBoxVisible = False
             'diseño de la grilla
